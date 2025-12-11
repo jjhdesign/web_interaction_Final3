@@ -1,837 +1,843 @@
 <!DOCTYPE html>
 <html lang="ko">
-
-<head>
-  <meta charset="UTF-8" />
-  <title>Lifespan Archive Prototype</title>
-
-  <!-- Pretendard 웹폰트 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;600;700&display=swap" rel="stylesheet" />
-
-  <style>
-    @font-face {
-      font-family: "Cafe24ProSlim";
-      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Light.woff2") format("woff2");
-      font-weight: 300;
-      font-display: swap;
-    }
-
-    :root {
-      --side-margin: 20px;
-      --top-bg: #000000;
-      --bottom-bg: #f3f3eb;
-      --accent: #fc5101;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: "Antonio", "Cafe24ProSlim", sans-serif;
-    }
-
-    .page {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* 첫 페이지 전용 상단 배경 */
-    .top-background {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      /* 슬라이드 트랙보다 위로 올려서 자식 요소(로고) 상호작용 가능하게 함 */
-      pointer-events: none;
-      overflow: hidden;
-      transform: translateX(0);
-      transition: transform 0.6s ease-in-out;
-    }
-
-    /* 두 번째 슬라이드부터 화면 왼쪽으로 밀려나는 상태 */
-    .top-background.slide-out {
-      transform: translateX(-100%);
-    }
-
-    .top-background img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .top-background .bg-main3 {
-      width: 91%;
-      height: auto;
-      object-fit: cover;
-      object-position: center;
-      left: 50%;
-      top: auto;
-      bottom: 0;
-      transform: translateX(-50%);
-    }
-
-    /* 로고 타틀 스타일 */
-    .logo-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      z-index: 10;
-      color: var(--accent);
-      white-space: nowrap;
-      pointer-events: auto;
-      /* 텍스트 선택 가능하도록 변경 */
-    }
-
-    .logo-main-title {
-      font-family: "Antonio", sans-serif;
-      font-size: 14vw;
-      font-weight: 700;
-      line-height: 0.85;
-      margin: 10px 0;
-      text-transform: uppercase;
-      text-align: center;
-      letter-spacing: -0.04em;
-    }
-
-    .logo-sub {
-      display: flex;
-      align-items: center;
-      font-family: "Antonio", sans-serif;
-      font-size: 2vw;
-      font-weight: 400;
-      gap: 12px;
-      color: var(--accent);
-      opacity: 0.9;
-      background: transparent !important;
-      /* 배경색 제거 */
-    }
-
-    .logo-sub.top {
-      padding-left: 4px;
-    }
-
-    .logo-sub.bottom {
-      justify-content: flex-end;
-      padding-right: 4px;
-    }
-
-    .logo-line {
-      flex: 1;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .logo-dots {
-      letter-spacing: 2px;
-      font-weight: 600;
-      position: relative;
-      top: -0.45em;
-      /* 점을 텍스트 중앙 높이로 올림 */
-    }
-
-    /* 하단 확장 시 로고 심플화 (메인 타이틀만 꽉 차게) */
-    .page.expanded-bottom .logo-sub {
-      display: none;
-    }
-
-    .page.expanded-bottom .logo-container {
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      transform: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .page.expanded-bottom .logo-main-title {
-      font-size: 8vh;
-      /* 상단 섹션 높이(10%)에 맞춤 */
-      margin: 0;
-      line-height: 1;
-      width: 100%;
-      position: relative;
-      top: -3px;
-      /* 시각적 중앙 정렬 보정 */
-    }
-
-    /* 상단 레이아웃 */
-    .top {
-      height: 50%;
-      background: var(--top-bg);
-      position: relative;
-      overflow: hidden;
-      transition: height 0.4s ease;
-    }
-
-    .bottom {
-      height: 50%;
-      background: var(--bottom-bg);
-      padding: 14px var(--side-margin);
-      position: relative;
-      transition: height 0.4s ease;
-      cursor: pointer;
-      /* 하단 전체를 클릭 가능 영역으로 표시 */
-    }
-
-    /* 호버 인터랙션 상태 */
-    .page.hover-top .top {
-      height: 60%;
-    }
-
-    .page.hover-top .bottom {
-      height: 40%;
-    }
-
-    .page.hover-bottom .top {
-      height: 40%;
-    }
-
-    .page.hover-bottom .bottom {
-      height: 60%;
-    }
-
-    /* 클릭 확장 상태 (호버보다 우선순위 높음) */
-    .page.expanded-top .top {
-      height: 90% !important;
-    }
-
-    .page.expanded-top .bottom {
-      height: 10% !important;
-    }
-
-    .page.expanded-bottom .top {
-      height: 10% !important;
-    }
-
-    .page.expanded-bottom .bottom {
-      height: 90% !important;
-    }
-
-    /* 하단 확장 시 (상단 10%) 스타일 조정 */
-    /* 하단 확장 시 (상단 10%) 스타일 조정 */
-    .page.expanded-bottom .slide-name {
-      font-size: 8vh !important;
-      /* 높이 기준으로 변경 */
-      top: 50%;
-      transform: translateY(-50%);
-      line-height: 1;
-      white-space: nowrap !important;
-      /* 강제 한 줄 표시 */
-      max-width: none !important;
-      /* 너비 제한 해제 */
-    }
-
-    /* 하단 확장 시 제목 내부의 br 태그 숨김 (줄바꿈 방지) */
-    .page.expanded-bottom .slide-name br {
-      display: none;
-    }
-
-    .page.expanded-bottom .years-indicator {
-      display: none;
-    }
-
-    .page.expanded-bottom .nav-arrow img {
-      height: 50px;
-      /* 화살표 크기 반으로 */
-    }
-
-    /* 하단 확장 시 이미지도 높이에 맞게 축소 */
-    .page.expanded-bottom .slide-photo-wrapper {
-      width: auto;
-      height: 100%;
-      aspect-ratio: 1/1;
-      /* 비율 유지 */
-    }
-
-    .page.expanded-bottom .slide-photo-placeholder {
-      object-fit: contain;
-    }
-
-    /* 하단 확장 시 우측 설명 텍스트 숨김 */
-    .page.expanded-bottom .slide-description-wrapper {
-      display: none;
-    }
-
-    /* 단, 엔딩 페이지는 예외적으로 설명 텍스트 표시 */
-    .page.expanded-bottom .ending-slide .slide-description-wrapper {
-      display: flex;
-    }
-
-    /* 화살표 버튼 (배경/동그라미 없음) */
-    .nav-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      z-index: 100;
-    }
-
-    .nav-arrow img {
-      height: 100px;
-      width: auto;
-      pointer-events: none;
-    }
-
-    .nav-arrow.left {
-      left: var(--side-margin);
-    }
-
-    .nav-arrow.right {
-      right: var(--side-margin);
-    }
-
-    .nav-arrow.left img {
-      transform: rotate(180deg);
-    }
-
-    .nav-arrow:disabled {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .nav-arrow.left:not(:disabled):hover img {
-      opacity: 0.8;
-      transform: scale(1.05) rotate(180deg);
-      transition: 0.15s ease;
-    }
-
-    .nav-arrow.right:not(:disabled):hover img {
-      opacity: 0.8;
-      transform: scale(1.05);
-      transition: 0.15s ease;
-    }
-
-    /* Years indicator */
-    .years-indicator {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      gap: 6px;
-      align-items: baseline;
-      color: #aaaaaa;
-      font-size: 14px;
-      text-transform: uppercase;
-      z-index: 90;
-      background: #000000;
-      padding: 4px;
-    }
-
-    .years-indicator span:first-child {
-      color: var(--accent);
-      font-size: 24px;
-      font-weight: 600;
-      min-width: 3ch;
-      text-align: right;
-    }
-
-    .slides-track {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      height: 100%;
-      transition: transform 0.6s ease-in-out;
-    }
-
-    .slide {
-      flex: 0 0 100%;
-      height: 100%;
-      position: relative;
-      padding: 0 var(--side-margin);
-    }
-
-    .slide-name {
-      position: absolute;
-      left: 8%;
-      top: 0;
-      max-width: 50vw;
-      font-size: 9.5vw;
-      font-weight: 700;
-      line-height: 0.95;
-      text-transform: uppercase;
-      color: #fc5101;
-      letter-spacing: -0.05em;
-      white-space: pre-line;
-      transition: font-size 0.4s ease;
-      /* z-index 제거 */
-    }
-
-    /* 특정 슬라이드만 제목을 앞으로 내보내기 위한 클래스 */
-    .slide.bring-title-front .slide-name {
-      z-index: 60;
-      /* 이미지 호버(50)보다 높게 설정 */
-    }
-
-    .page.hover-bottom .slide-name {
-      font-size: 7.5vw;
-    }
-
-    .slide-photo-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 45%;
-      height: 100%;
-      transition: width 0.4s ease, height 0.4s ease,
-        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.5s ease;
-      /* z-index removed to default to auto (below description) */
-    }
-
-    /* 상단 확장 시 이미지 래퍼 크기 조정 */
-    .page.expanded-top .slide-photo-wrapper {
-      width: 80%;
-      height: 100%;
-      /* 위아래 마진 제거하고 100% 차지 */
-    }
-
-    /* 상단 확장 상태에서 이미지 호버 시 z-index 상승 및 떠오르는 효과 */
-    .page.expanded-top .slide-photo-wrapper:hover {
-      z-index: 50;
-      /* indicator(90)보다는 낮고, description보다는 높게 */
-      transform: translate(-50%, -50%) scale(1.05);
-      filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6));
-    }
-
-    /* Aluminum Can 슬라이드(index 4) 예외 처리: 하단 확장 시(상단 축소) 이미지 우측 이동 */
-    .page.expanded-bottom .slide.slide-aluminum .slide-photo-wrapper {
-      left: 55%;
-      /* 기본 50%에서 우측으로 5% 이동 */
-    }
-
-    .slide-photo-placeholder {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: object-fit 0.4s ease;
-    }
-
-    /* 상단 확장 시 이미지가 잘리지 않도록 contain으로 변경 */
-    .page.expanded-top .slide-photo-placeholder {
-      object-fit: contain;
-    }
-
-    .slide-description-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 66.666%;
-      transform: translateY(-50%);
-      max-width: calc(100% - 66.666% - var(--side-margin) - 120px);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      transition: background 0.3s ease, padding 0.3s ease;
-      z-index: 20;
-      /* 이미지(auto)보다 높게 설정 */
-    }
-
-    /* 상단 확장 시 설명 텍스트 배경 추가 */
-    .page.expanded-top .slide-description-wrapper {
-      background: rgba(0, 0, 0, 1);
-      padding: 4px;
-    }
-
-    .slide-korean-name {
-      font-size: 24px;
-      color: #ddd;
-      font-weight: 400;
-    }
-
-    .slide-description {
-      font-size: 16px;
-      line-height: 1.6;
-      color: #ddd;
-      white-space: pre-line;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
-
-    .slide-description .english-text,
-    .graph-tooltip .english-text {
-      display: inline-block;
-      vertical-align: baseline;
-      transform: translateY(0.06em);
-    }
-
-    /* 그래프 */
-    .graph-wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      /* 캔버스 전체 클릭 가능 */
-    }
-
-    /* 툴팁 스타일 */
-    .graph-tooltip {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 12px 16px;
-      border-radius: 0;
-      font-size: 14px;
-      font-family: "Antonio", "Cafe24ProSlim", sans-serif;
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .graph-tooltip>div {
-      white-space: pre-line;
-      line-height: 1.4;
-    }
-
-    .graph-tooltip>div .english-text {
-      line-height: 1.33;
-      /* 5% 낮춤 (1.4 * 0.95 = 1.33) */
-    }
-
-    .graph-tooltip.show {
-      opacity: 1;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="page">
-    <!-- 상단 -->
-    <section class="top">
-      <div class="top-background" id="topBg">
-        <img src="pic/main3.jpg" class="bg-main3" alt="" />
-        <!-- 로고 HTML 구현 -->
-        <div class="logo-container">
-          <div class="logo-sub top">
-            <span>From Human</span>
-            <span class="logo-dots">....</span>
-            <div class="logo-line"></div>
-          </div>
-          <h1 class="logo-main-title">Scale of Time</h1>
-          <div class="logo-sub bottom">
-            <div class="logo-line"></div>
-            <span class="logo-dots">....</span>
-            <span>to Universe</span>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scale of Time</title>
+
+    <!-- Pretendard 웹폰트 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      @font-face {
+        font-family: "Cafe24ProSlim";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Light.woff2")
+          format("woff2");
+        font-weight: 300;
+        font-display: swap;
+      }
+
+      :root {
+        --side-margin: 20px;
+        --top-bg: #000000;
+        --bottom-bg: #f3f3eb;
+        --accent: #fc5101;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Antonio", "Cafe24ProSlim", sans-serif;
+      }
+
+      .page {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* 첫 페이지 전용 상단 배경 */
+      .top-background {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        /* 슬라이드 트랙보다 위로 올려서 자식 요소(로고) 상호작용 가능하게 함 */
+        pointer-events: none;
+        overflow: hidden;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+      }
+
+      /* 두 번째 슬라이드부터 화면 왼쪽으로 밀려나는 상태 */
+      .top-background.slide-out {
+        transform: translateX(-100%);
+      }
+
+      .top-background img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .top-background .bg-main3 {
+        width: 91%;
+        height: auto;
+        object-fit: cover;
+        object-position: center;
+        left: 50%;
+        top: auto;
+        bottom: 0;
+        transform: translateX(-50%);
+      }
+
+      /* 로고 타틀 스타일 */
+      .logo-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        z-index: 10;
+        color: var(--accent);
+        white-space: nowrap;
+        pointer-events: auto;
+        /* 텍스트 선택 가능하도록 변경 */
+      }
+
+      .logo-main-title {
+        font-family: "Antonio", sans-serif;
+        font-size: 14vw;
+        font-weight: 700;
+        line-height: 0.85;
+        margin: 10px 0;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: -0.04em;
+      }
+
+      .logo-sub {
+        display: flex;
+        align-items: center;
+        font-family: "Antonio", sans-serif;
+        font-size: 2vw;
+        font-weight: 400;
+        gap: 12px;
+        color: var(--accent);
+        opacity: 0.9;
+        background: transparent !important;
+        /* 배경색 제거 */
+      }
+
+      .logo-sub.top {
+        padding-left: 4px;
+      }
+
+      .logo-sub.bottom {
+        justify-content: flex-end;
+        padding-right: 4px;
+      }
+
+      .logo-line {
+        flex: 1;
+        height: 1px;
+        background: var(--accent);
+      }
+
+      .logo-dots {
+        letter-spacing: 2px;
+        font-weight: 600;
+        position: relative;
+        top: -0.45em;
+        /* 점을 텍스트 중앙 높이로 올림 */
+      }
+
+      /* 하단 확장 시 로고 심플화 (메인 타이틀만 꽉 차게) */
+      .page.expanded-bottom .logo-sub {
+        display: none;
+      }
+
+      .page.expanded-bottom .logo-container {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .page.expanded-bottom .logo-main-title {
+        font-size: 8vh;
+        /* 상단 섹션 높이(10%)에 맞춤 */
+        margin: 0;
+        line-height: 1;
+        width: 100%;
+        position: relative;
+        top: -3px;
+        /* 시각적 중앙 정렬 보정 */
+      }
+
+      /* 상단 레이아웃 */
+      .top {
+        height: 50%;
+        background: var(--top-bg);
+        position: relative;
+        overflow: hidden;
+        transition: height 0.4s ease;
+      }
+
+      .bottom {
+        height: 50%;
+        background: var(--bottom-bg);
+        padding: 14px var(--side-margin);
+        position: relative;
+        transition: height 0.4s ease;
+        cursor: pointer;
+        /* 하단 전체를 클릭 가능 영역으로 표시 */
+      }
+
+      /* 호버 인터랙션 상태 */
+      .page.hover-top .top {
+        height: 60%;
+      }
+
+      .page.hover-top .bottom {
+        height: 40%;
+      }
+
+      .page.hover-bottom .top {
+        height: 40%;
+      }
+
+      .page.hover-bottom .bottom {
+        height: 60%;
+      }
+
+      /* 클릭 확장 상태 (호버보다 우선순위 높음) */
+      .page.expanded-top .top {
+        height: 90% !important;
+      }
+
+      .page.expanded-top .bottom {
+        height: 10% !important;
+      }
+
+      .page.expanded-bottom .top {
+        height: 10% !important;
+      }
+
+      .page.expanded-bottom .bottom {
+        height: 90% !important;
+      }
+
+      /* 하단 확장 시 (상단 10%) 스타일 조정 */
+      /* 하단 확장 시 (상단 10%) 스타일 조정 */
+      .page.expanded-bottom .slide-name {
+        font-size: 8vh !important;
+        /* 높이 기준으로 변경 */
+        top: 50%;
+        transform: translateY(-50%);
+        line-height: 1;
+        white-space: nowrap !important;
+        /* 강제 한 줄 표시 */
+        max-width: none !important;
+        /* 너비 제한 해제 */
+      }
+
+      /* 하단 확장 시 제목 내부의 br 태그 숨김 (줄바꿈 방지) */
+      .page.expanded-bottom .slide-name br {
+        display: none;
+      }
+
+      .page.expanded-bottom .years-indicator {
+        display: none;
+      }
+
+      .page.expanded-bottom .nav-arrow img {
+        height: 50px;
+        /* 화살표 크기 반으로 */
+      }
+
+      /* 하단 확장 시 이미지도 높이에 맞게 축소 */
+      .page.expanded-bottom .slide-photo-wrapper {
+        width: auto;
+        height: 100%;
+        aspect-ratio: 1/1;
+        /* 비율 유지 */
+      }
+
+      .page.expanded-bottom .slide-photo-placeholder {
+        object-fit: contain;
+      }
+
+      /* 하단 확장 시 우측 설명 텍스트 숨김 */
+      .page.expanded-bottom .slide-description-wrapper {
+        display: none;
+      }
+
+      /* 단, 엔딩 페이지는 예외적으로 설명 텍스트 표시 */
+      .page.expanded-bottom .ending-slide .slide-description-wrapper {
+        display: flex;
+      }
+
+      /* 화살표 버튼 (배경/동그라미 없음) */
+      .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 100;
+      }
+
+      .nav-arrow img {
+        height: 100px;
+        width: auto;
+        pointer-events: none;
+      }
+
+      .nav-arrow.left {
+        left: var(--side-margin);
+      }
+
+      .nav-arrow.right {
+        right: var(--side-margin);
+      }
+
+      .nav-arrow.left img {
+        transform: rotate(180deg);
+      }
+
+      .nav-arrow:disabled {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-arrow.left:not(:disabled):hover img {
+        opacity: 0.8;
+        transform: scale(1.05) rotate(180deg);
+        transition: 0.15s ease;
+      }
+
+      .nav-arrow.right:not(:disabled):hover img {
+        opacity: 0.8;
+        transform: scale(1.05);
+        transition: 0.15s ease;
+      }
+
+      /* Years indicator */
+      .years-indicator {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        gap: 6px;
+        align-items: baseline;
+        color: #aaaaaa;
+        font-size: 14px;
+        text-transform: uppercase;
+        z-index: 90;
+        background: #000000;
+        padding: 4px;
+      }
+
+      .years-indicator span:first-child {
+        color: var(--accent);
+        font-size: 24px;
+        font-weight: 600;
+        min-width: 3ch;
+        text-align: right;
+      }
+
+      .slides-track {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        height: 100%;
+        transition: transform 0.6s ease-in-out;
+      }
+
+      .slide {
+        flex: 0 0 100%;
+        height: 100%;
+        position: relative;
+        padding: 0 var(--side-margin);
+      }
+
+      .slide-name {
+        position: absolute;
+        left: 8%;
+        top: 0;
+        max-width: 50vw;
+        font-size: 9.5vw;
+        font-weight: 700;
+        line-height: 0.95;
+        text-transform: uppercase;
+        color: #fc5101;
+        letter-spacing: -0.05em;
+        white-space: pre-line;
+        transition: font-size 0.4s ease;
+        /* z-index 제거 */
+      }
+
+      /* 특정 슬라이드만 제목을 앞으로 내보내기 위한 클래스 */
+      .slide.bring-title-front .slide-name {
+        z-index: 60;
+        /* 이미지 호버(50)보다 높게 설정 */
+      }
+
+      .page.hover-bottom .slide-name {
+        font-size: 7.5vw;
+      }
+
+      .slide-photo-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 45%;
+        height: 100%;
+        transition: width 0.4s ease, height 0.4s ease,
+          transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.5s ease;
+        /* z-index removed to default to auto (below description) */
+      }
+
+      /* 상단 확장 시 이미지 래퍼 크기 조정 */
+      .page.expanded-top .slide-photo-wrapper {
+        width: 80%;
+        height: 100%;
+        /* 위아래 마진 제거하고 100% 차지 */
+      }
+
+      /* 상단 확장 상태에서 이미지 호버 시 z-index 상승 및 떠오르는 효과 */
+      .page.expanded-top .slide-photo-wrapper:hover {
+        z-index: 50;
+        /* indicator(90)보다는 낮고, description보다는 높게 */
+        transform: translate(-50%, -50%) scale(1.05);
+        filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6));
+      }
+
+      /* Aluminum Can 슬라이드(index 4) 예외 처리: 하단 확장 시(상단 축소) 이미지 우측 이동 */
+      .page.expanded-bottom .slide.slide-aluminum .slide-photo-wrapper {
+        left: 55%;
+        /* 기본 50%에서 우측으로 5% 이동 */
+      }
+
+      .slide-photo-placeholder {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: object-fit 0.4s ease;
+      }
+
+      /* 상단 확장 시 이미지가 잘리지 않도록 contain으로 변경 */
+      .page.expanded-top .slide-photo-placeholder {
+        object-fit: contain;
+      }
+
+      .slide-description-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 66.666%;
+        transform: translateY(-50%);
+        max-width: calc(100% - 66.666% - var(--side-margin) - 120px);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: background 0.3s ease, padding 0.3s ease;
+        z-index: 20;
+        /* 이미지(auto)보다 높게 설정 */
+      }
+
+      /* 상단 확장 시 설명 텍스트 배경 추가 */
+      .page.expanded-top .slide-description-wrapper {
+        background: rgba(0, 0, 0, 1);
+        padding: 4px;
+      }
+
+      .slide-korean-name {
+        font-size: 24px;
+        color: #ddd;
+        font-weight: 400;
+      }
+
+      .slide-description {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #ddd;
+        white-space: pre-line;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+      }
+
+      .slide-description .english-text,
+      .graph-tooltip .english-text {
+        display: inline-block;
+        vertical-align: baseline;
+        transform: translateY(0.06em);
+      }
+
+      /* 그래프 */
+      .graph-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      canvas {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        /* 캔버스 전체 클릭 가능 */
+      }
+
+      /* 툴팁 스타일 */
+      .graph-tooltip {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 0;
+        font-size: 14px;
+        font-family: "Antonio", "Cafe24ProSlim", sans-serif;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .graph-tooltip > div {
+        white-space: pre-line;
+        line-height: 1.4;
+      }
+
+      .graph-tooltip > div .english-text {
+        line-height: 1.33;
+        /* 5% 낮춤 (1.4 * 0.95 = 1.33) */
+      }
+
+      .graph-tooltip.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <!-- 상단 -->
+      <section class="top">
+        <div class="top-background" id="topBg">
+          <img src="pic/main3.jpg" class="bg-main3" alt="" />
+          <!-- 로고 HTML 구현 -->
+          <div class="logo-container">
+            <div class="logo-sub top">
+              <span>From Human</span>
+              <span class="logo-dots">....</span>
+              <div class="logo-line"></div>
+            </div>
+            <h1 class="logo-main-title">Scale of Time</h1>
+            <div class="logo-sub bottom">
+              <div class="logo-line"></div>
+              <span class="logo-dots">....</span>
+              <span>to Universe</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <button class="nav-arrow left" id="navPrev">
-        <img src="pic/arrow.svg" alt="prev" />
-      </button>
+        <button class="nav-arrow left" id="navPrev">
+          <img src="pic/arrow.svg" alt="prev" />
+        </button>
 
-      <button class="nav-arrow right" id="navNext">
-        <img src="pic/arrow.svg" alt="next" />
-      </button>
+        <button class="nav-arrow right" id="navNext">
+          <img src="pic/arrow.svg" alt="next" />
+        </button>
 
-      <div class="years-indicator">
-        <span id="yearsValue">00</span>
-        <span>Years</span>
-      </div>
+        <div class="years-indicator">
+          <span id="yearsValue">00</span>
+          <span>Years</span>
+        </div>
 
-      <div class="slides-track" id="slidesTrack"></div>
-    </section>
+        <div class="slides-track" id="slidesTrack"></div>
+      </section>
 
-    <!-- 하단 -->
-    <section class="bottom">
-      <div class="graph-wrapper">
-        <canvas id="lifeGraph"></canvas>
-        <div class="graph-tooltip" id="graphTooltip"></div>
-      </div>
-    </section>
-  </div>
+      <!-- 하단 -->
+      <section class="bottom">
+        <div class="graph-wrapper">
+          <canvas id="lifeGraph"></canvas>
+          <div class="graph-tooltip" id="graphTooltip"></div>
+        </div>
+      </section>
+    </div>
 
-  <script>
-    /* ---------------------- 데이터 ---------------------- */
-    const lifespanData = [
-      {
-        eng: "Human Lifespan",
-        kor: "인간 평균 수명",
-        time: 80,
-        desc: "인간이 생물학적·의학적 조건에 따라 평균적으로 생존하는 기간을 의미하며, 전 세계 인구 통계를 기반으로 산출된 보편적 평균값이다.",
-      },
-      {
-        eng: "Metal Can Decomposition",
-        kor: "금속 캔 분해 기간",
-        time: 100,
-        desc: "철 또는 주석으로 만들어진 금속 캔이 환경 속에서 부식과 산화 과정을 거쳐 원래 형태를 상실하고 자연적 분해 상태에 도달하기까지 걸리는 예상 기간이다.",
-      },
-      {
-        eng: "Sea Turtle Lifespan",
-        kor: "바다거북 수명",
-        time: 120,
-        desc: "바다거북이 자연 환경에서 생존할 수 있는 평균적 수명으로, 일부 개체는 120년 이상 생존한 사례가 보고되어 있다.",
-      },
-      {
-        eng: "Aluminum Can Decomposition",
-        kor: "알루미늄 캔 분해 기간",
-        time: 150,
-        desc: "알루미늄 소재가 자연에서 산화에 의해 구조적 안정성을 잃고 분해되기까지 필요한 시간으로, 제조 방식과 환경에 따라 차이가 발생한다.",
-      },
-      {
-        eng: "Bowhead Whale </br>Lifespan",
-        kor: "북극고래 수명",
-        time: 200,
-        desc: "북극 해역에 서식하는 고래류의 생물학적 수명으로, 눈 수정체 분석 등을 통해 약 200년 전후의 생존 기간이 추정된다.",
-      },
-      {
-        eng: "Greenland Shark </br>Lifespan",
-        kor: "그린란드 상어 수명",
-        time: 392,
-        desc: "그린란드 상어의 수명은 방사성 탄소 분석을 기반으로 약 392년 전후로 추정되며, 매우 느린 성장 속도가 특징이다.",
-      },
-      {
-        eng: "PET Plastic Decomposition",
-        kor: "PET 플라스틱 분해 기간",
-        time: 450,
-        desc: "폴리에틸렌 테레프탈레이트가 환경에서 광분해와 열화 과정을 거쳐 구조가 붕괴되기까지 걸리는 기간을 의미한다.",
-      },
-      {
-        eng: "Glass Bottle Decomposition",
-        kor: "유리병 분해 기간",
-        time: 500,
-        desc: "규사 기반의 유리병이 자연에서 화학적 반응이나 침식 작용을 겪어 분해되기까지 필요한 기간은 일반적으로 매우 길고 약 500년 이상으로 추정된다.",
-      },
-      {
-        eng: "Ocean Quahog Lifespan",
-        kor: "대서양 조개 수명",
-        time: 507,
-        desc: "아르크티카 아일란디카 종의 조개는 패각 성장층 분석을 통해 507년 이상 생존한 개체가 발견된 장수 생물로 알려져 있다.",
-      },
-      {
-        eng: "Roman Civilization",
-        kor: "고대 로마 문명",
-        time: 2206,
-        desc: "로마 왕정 시기부터 동로마 제국의 쇠퇴까지 이어진 문명의 존속 기간으로, 정치적·행정적 연속성을 기준으로 산출된다.",
-      },
-      {
-        eng: "Ancient Egyptian Dynasties",
-        kor: "고대 이집트 왕조",
-        time: 3000,
-        desc: "고대 이집트의 초기 왕조부터 후기 왕조까지 지속된 파라오 중심의 통치 체계를 의미하며, 약 3000년 동안 이어진 것으로 추정된다.",
-      },
-      {
-        eng: "Bristlecone Pine",
-        kor: "브리슬콘 소나무",
-        time: 5000,
-        desc: "미국 서부 고산 지대의 소나무 종으로, 연륜 분석을 통해 5000년 이상 생존한 개체가 확인된 장수 식물이다.",
-      },
-      {
-        eng: "Earliest Civilization",
-        kor: "가장 오래된 문명",
-        time: 6000,
-        desc: "메소포타미아 지역에서 도시·문자·행정 체계가 형성되며 문명적 특징이 나타난 시점으로 약 6000년 전으로 알려져 있다.",
-      },
-      {
-        eng: "Jomon </br>Sugi",
-        kor: "조몬 스기",
-        time: 7000,
-        desc: "일본 야쿠시마 섬의 삼나무로, 나이테 분석 등을 통해 약 7000년 전후로 추정되는 오래된 개체가 보고되어 있다.",
-      },
-      {
-        eng: "Oldest </br>Pottery",
-        kor: "가장 오래된 도자기",
-        time: 20000,
-        desc: "중국 장시성 선인동 유적에서 발굴된 초기 도자기 조각으로, 열처리된 점토 분석을 통해 약 2만 년 전 제작된 것으로 판단된다.",
-      },
-      {
-        eng: "Oldest Cave Painting",
-        kor: "가장 오래된 동굴벽화",
-        time: 45000,
-        desc: "인도네시아 술라웨시 섬에서 발견된 동굴벽화로, 방사성 연대 측정 결과 약 4만 5천 년 전에 제작된 것으로 분석된다.",
-      },
-      {
-        eng: "Homo </br>Sapiens </br>Emergence",
-        kor: "현생 인류 등장",
-        time: 300000,
-        desc: "해부학적 현대 인류인 호모 사피엔스가 출현한 시점으로, 화석과 유전학 기반 분석에 따라 약 30만 년 전으로 추정된다.",
-      },
-      {
-        eng: "Himalayan Formation",
-        kor: "히말라야 산맥 형성",
-        time: 50000000,
-        desc: "인도판과 유라시아판의 충돌로 인해 지각이 융기하며 히말라야 산맥이 형성되기 시작한 시점으로 약 5000만 년 전으로 추정된다.",
-      },
-      {
-        eng: "Dinosaur </br>Era",
-        kor: "공룡 존재 기간",
-        time: 165000000,
-        desc: "트라이아스기 후기부터 백악기 말까지 공룡류가 지구에 서식한 기간으로 약 1억 6500만 년 동안 지속되었다.",
-      },
-      {
-        eng: "First Mammals",
-        kor: "최초의 포유류 등장",
-        time: 200000000,
-        desc: "최초의 포유류인 브라질로돈 쿼드랑굴라리스가 지구에 출현한 시점으로, 화석 기록을 기반으로 약 2억 년 전으로 추정된다.",
-      },
-      {
-        eng: "First Life on Earth",
-        kor: "최초의 생명 등장",
-        time: 3700000000,
-        desc: "지구 초기 해양에서 원시 미생물이 처음 나타난 시점으로, 미세 화석과 지질학적 분석을 통해 약 37억 년 전으로 추정된다.",
-      },
-      {
-        eng: "Moon Formation",
-        kor: "달 생성",
-        time: 4500000000,
-        desc: "초기 지구에 대형 천체가 충돌하여 발생한 파편이 응집되면서 달이 형성된 것으로 설명되는 충돌 기원설에 기반한다.",
-      },
-      {
-        eng: "Earth Age",
-        kor: "지구 나이",
-        time: 4540000000,
-        desc: "방사성 동위원소 연대 측정을 통해 계산된 지구의 연령으로, 지각 물질 및 운석의 연대를 분석해 약 45억 4천만 년으로 산출된다.",
-      },
-      {
-        eng: "Sun Age",
-        kor: "태양의 나이",
-        time: 4600000000,
-        desc: "태양이 분자 구름의 붕괴로 형성된 이후 핵융합을 시작하기까지의 경과 시간으로 약 46억 년이다.",
-      },
-      {
-        eng: "Oldest </br>Planet",
-        kor: "가장 오래된 행성",
-        time: 12700000000,
-        desc: "PSR B1620–26 b로 알려진 외계 행성의 연령으로, 주변 항성과 성단의 특성을 기반으로 약 127억 년 전 형성된 것으로 추정된다.",
-      },
-      {
-        eng: "Oldest </br>Black Hole",
-        kor: "가장 오래된 블랙홀",
-        time: 13000000000,
-        desc: "고적색편이 은하 GN-z11 중심부의 초대질량 블랙홀로, 우주 초기 단계에서 이미 형성된 것으로 분석되며 약 130억 년 이상으로 추정된다.",
-      },
-      {
-        eng: "Oldest Star",
-        kor: "가장 오래된 항성",
-        time: 13200000000,
-        desc: "HE 1523–0901 항성의 금속함량 및 핵종 붕괴 모델을 기반으로 한 분석 결과, 약 132억 년 된 항성으로 분류된다.",
-      },
-      {
-        eng: "Milky Way Formation",
-        kor: "우리 은하 형성",
-        time: 13500000000,
-        desc: "가스와 암흑물질이 응축하면서 초기 은하 구조가 형성된 시점으로, 여러 천문 관측 자료를 기반으로 약 135억 년 전으로 추정된다.",
-      },
-      {
-        eng: "Age of the Universe",
-        kor: "우주의 나이",
-        time: 13800000000,
-        desc: "빅뱅 이후 우주가 팽창해 온 전체 경과 시간으로, 허블 상수와 우주 배경복사 분석 등을 통해 약 138억 년으로 산출된다.",
-      },
-    ];
+    <script>
+      /* ---------------------- 데이터 ---------------------- */
+      const lifespanData = [
+        {
+          eng: "Human Lifespan",
+          kor: "인간 평균 수명",
+          time: 80,
+          desc: "인간이 생물학적·의학적 조건에 따라 평균적으로 생존하는 기간을 의미하며, 전 세계 인구 통계를 기반으로 산출된 보편적 평균값이다.",
+        },
+        {
+          eng: "Metal Can Decomposition",
+          kor: "금속 캔 분해 기간",
+          time: 100,
+          desc: "철 또는 주석으로 만들어진 금속 캔이 환경 속에서 부식과 산화 과정을 거쳐 원래 형태를 상실하고 자연적 분해 상태에 도달하기까지 걸리는 예상 기간이다.",
+        },
+        {
+          eng: "Sea Turtle Lifespan",
+          kor: "바다거북 수명",
+          time: 120,
+          desc: "바다거북이 자연 환경에서 생존할 수 있는 평균적 수명으로, 일부 개체는 120년 이상 생존한 사례가 보고되어 있다.",
+        },
+        {
+          eng: "Aluminum Can Decomposition",
+          kor: "알루미늄 캔 분해 기간",
+          time: 150,
+          desc: "알루미늄 소재가 자연에서 산화에 의해 구조적 안정성을 잃고 분해되기까지 필요한 시간으로, 제조 방식과 환경에 따라 차이가 발생한다.",
+        },
+        {
+          eng: "Bowhead Whale </br>Lifespan",
+          kor: "북극고래 수명",
+          time: 200,
+          desc: "북극 해역에 서식하는 고래류의 생물학적 수명으로, 눈 수정체 분석 등을 통해 약 200년 전후의 생존 기간이 추정된다.",
+        },
+        {
+          eng: "Greenland Shark </br>Lifespan",
+          kor: "그린란드 상어 수명",
+          time: 392,
+          desc: "그린란드 상어의 수명은 방사성 탄소 분석을 기반으로 약 392년 전후로 추정되며, 매우 느린 성장 속도가 특징이다.",
+        },
+        {
+          eng: "PET Plastic Decomposition",
+          kor: "PET 플라스틱 분해 기간",
+          time: 450,
+          desc: "폴리에틸렌 테레프탈레이트가 환경에서 광분해와 열화 과정을 거쳐 구조가 붕괴되기까지 걸리는 기간을 의미한다.",
+        },
+        {
+          eng: "Glass Bottle Decomposition",
+          kor: "유리병 분해 기간",
+          time: 500,
+          desc: "규사 기반의 유리병이 자연에서 화학적 반응이나 침식 작용을 겪어 분해되기까지 필요한 기간은 일반적으로 매우 길고 약 500년 이상으로 추정된다.",
+        },
+        {
+          eng: "Ocean Quahog Lifespan",
+          kor: "대서양 조개 수명",
+          time: 507,
+          desc: "아르크티카 아일란디카 종의 조개는 패각 성장층 분석을 통해 507년 이상 생존한 개체가 발견된 장수 생물로 알려져 있다.",
+        },
+        {
+          eng: "Roman Civilization",
+          kor: "고대 로마 문명",
+          time: 2206,
+          desc: "로마 왕정 시기부터 동로마 제국의 쇠퇴까지 이어진 문명의 존속 기간으로, 정치적·행정적 연속성을 기준으로 산출된다.",
+        },
+        {
+          eng: "Ancient Egyptian Dynasties",
+          kor: "고대 이집트 왕조",
+          time: 3000,
+          desc: "고대 이집트의 초기 왕조부터 후기 왕조까지 지속된 파라오 중심의 통치 체계를 의미하며, 약 3000년 동안 이어진 것으로 추정된다.",
+        },
+        {
+          eng: "Bristlecone Pine",
+          kor: "브리슬콘 소나무",
+          time: 5000,
+          desc: "미국 서부 고산 지대의 소나무 종으로, 연륜 분석을 통해 5000년 이상 생존한 개체가 확인된 장수 식물이다.",
+        },
+        {
+          eng: "Earliest Civilization",
+          kor: "가장 오래된 문명",
+          time: 6000,
+          desc: "메소포타미아 지역에서 도시·문자·행정 체계가 형성되며 문명적 특징이 나타난 시점으로 약 6000년 전으로 알려져 있다.",
+        },
+        {
+          eng: "Jomon </br>Sugi",
+          kor: "조몬 스기",
+          time: 7000,
+          desc: "일본 야쿠시마 섬의 삼나무로, 나이테 분석 등을 통해 약 7000년 전후로 추정되는 오래된 개체가 보고되어 있다.",
+        },
+        {
+          eng: "Oldest </br>Pottery",
+          kor: "가장 오래된 도자기",
+          time: 20000,
+          desc: "중국 장시성 선인동 유적에서 발굴된 초기 도자기 조각으로, 열처리된 점토 분석을 통해 약 2만 년 전 제작된 것으로 판단된다.",
+        },
+        {
+          eng: "Oldest Cave Painting",
+          kor: "가장 오래된 동굴벽화",
+          time: 45000,
+          desc: "인도네시아 술라웨시 섬에서 발견된 동굴벽화로, 방사성 연대 측정 결과 약 4만 5천 년 전에 제작된 것으로 분석된다.",
+        },
+        {
+          eng: "Homo </br>Sapiens </br>Emergence",
+          kor: "현생 인류 등장",
+          time: 300000,
+          desc: "해부학적 현대 인류인 호모 사피엔스가 출현한 시점으로, 화석과 유전학 기반 분석에 따라 약 30만 년 전으로 추정된다.",
+        },
+        {
+          eng: "Himalayan Formation",
+          kor: "히말라야 산맥 형성",
+          time: 50000000,
+          desc: "인도판과 유라시아판의 충돌로 인해 지각이 융기하며 히말라야 산맥이 형성되기 시작한 시점으로 약 5000만 년 전으로 추정된다.",
+        },
+        {
+          eng: "Dinosaur </br>Era",
+          kor: "공룡 존재 기간",
+          time: 165000000,
+          desc: "트라이아스기 후기부터 백악기 말까지 공룡류가 지구에 서식한 기간으로 약 1억 6500만 년 동안 지속되었다.",
+        },
+        {
+          eng: "First Mammals",
+          kor: "최초의 포유류 등장",
+          time: 200000000,
+          desc: "최초의 포유류인 브라질로돈 쿼드랑굴라리스가 지구에 출현한 시점으로, 화석 기록을 기반으로 약 2억 년 전으로 추정된다.",
+        },
+        {
+          eng: "First Life on Earth",
+          kor: "최초의 생명 등장",
+          time: 3700000000,
+          desc: "지구 초기 해양에서 원시 미생물이 처음 나타난 시점으로, 미세 화석과 지질학적 분석을 통해 약 37억 년 전으로 추정된다.",
+        },
+        {
+          eng: "Moon Formation",
+          kor: "달 생성",
+          time: 4500000000,
+          desc: "초기 지구에 대형 천체가 충돌하여 발생한 파편이 응집되면서 달이 형성된 것으로 설명되는 충돌 기원설에 기반한다.",
+        },
+        {
+          eng: "Earth Age",
+          kor: "지구 나이",
+          time: 4540000000,
+          desc: "방사성 동위원소 연대 측정을 통해 계산된 지구의 연령으로, 지각 물질 및 운석의 연대를 분석해 약 45억 4천만 년으로 산출된다.",
+        },
+        {
+          eng: "Sun Age",
+          kor: "태양의 나이",
+          time: 4600000000,
+          desc: "태양이 분자 구름의 붕괴로 형성된 이후 핵융합을 시작하기까지의 경과 시간으로 약 46억 년이다.",
+        },
+        {
+          eng: "Oldest </br>Planet",
+          kor: "가장 오래된 행성",
+          time: 12700000000,
+          desc: "PSR B1620–26 b로 알려진 외계 행성의 연령으로, 주변 항성과 성단의 특성을 기반으로 약 127억 년 전 형성된 것으로 추정된다.",
+        },
+        {
+          eng: "Oldest </br>Black Hole",
+          kor: "가장 오래된 블랙홀",
+          time: 13000000000,
+          desc: "고적색편이 은하 GN-z11 중심부의 초대질량 블랙홀로, 우주 초기 단계에서 이미 형성된 것으로 분석되며 약 130억 년 이상으로 추정된다.",
+        },
+        {
+          eng: "Oldest Star",
+          kor: "가장 오래된 항성",
+          time: 13200000000,
+          desc: "HE 1523–0901 항성의 금속함량 및 핵종 붕괴 모델을 기반으로 한 분석 결과, 약 132억 년 된 항성으로 분류된다.",
+        },
+        {
+          eng: "Milky Way Formation",
+          kor: "우리 은하 형성",
+          time: 13500000000,
+          desc: "가스와 암흑물질이 응축하면서 초기 은하 구조가 형성된 시점으로, 여러 천문 관측 자료를 기반으로 약 135억 년 전으로 추정된다.",
+        },
+        {
+          eng: "Age of the Universe",
+          kor: "우주의 나이",
+          time: 13800000000,
+          desc: "빅뱅 이후 우주가 팽창해 온 전체 경과 시간으로, 허블 상수와 우주 배경복사 분석 등을 통해 약 138억 년으로 산출된다.",
+        },
+      ];
 
-    const contentSlides = lifespanData.map((item) => {
-      return {
-        type: "content",
-        name: item.eng,
-        koreanName: item.kor,
-        years: item.time,
-        lifespan: item.time,
-        description: item.desc,
-      };
-    });
+      const contentSlides = lifespanData.map((item) => {
+        return {
+          type: "content",
+          name: item.eng,
+          koreanName: item.kor,
+          years: item.time,
+          lifespan: item.time,
+          description: item.desc,
+        };
+      });
 
-    const slides = [
-      { type: "cover", name: "", years: 0, description: "" },
-      ...contentSlides,
-      {
-        type: "ending",
-        name: "THANK YOU\nFOR WATCHING",
-        years: 0,
-        description:
-          "2025-2 Web Interaction Final Project\njasonjeong@seoultech.ac.kr\nCopyright ⓒ 2025 JaeHyun Jeong. All rights reserved.",
-      },
-    ];
+      const slides = [
+        { type: "cover", name: "", years: 0, description: "" },
+        ...contentSlides,
+        {
+          type: "ending",
+          name: "THANK YOU\nFOR WATCHING",
+          years: 0,
+          description:
+            "2025-2 Web Interaction Final Project\njasonjeong@seoultech.ac.kr\nCopyright ⓒ 2025 JaeHyun Jeong. All rights reserved.",
+        },
+      ];
 
-    /* ---------------------- DOM ---------------------- */
-    const slidesTrackEl = document.getElementById("slidesTrack");
-    const navPrevEl = document.getElementById("navPrev");
-    const navNextEl = document.getElementById("navNext");
-    const yearsValueEl = document.getElementById("yearsValue");
-    const graphCanvas = document.getElementById("lifeGraph");
-    const ctx = graphCanvas.getContext("2d");
-    const topBg = document.getElementById("topBg");
-    const tooltip = document.getElementById("graphTooltip");
+      /* ---------------------- DOM ---------------------- */
+      const slidesTrackEl = document.getElementById("slidesTrack");
+      const navPrevEl = document.getElementById("navPrev");
+      const navNextEl = document.getElementById("navNext");
+      const yearsValueEl = document.getElementById("yearsValue");
+      const graphCanvas = document.getElementById("lifeGraph");
+      const ctx = graphCanvas.getContext("2d");
+      const topBg = document.getElementById("topBg");
+      const tooltip = document.getElementById("graphTooltip");
 
-    let currentIndex = 0;
-    let barData = []; // 막대 위치 정보 저장
+      let currentIndex = 0;
+      let barData = []; // 막대 위치 정보 저장
 
-    /* ---------------------- 텍스트 처리 함수 ---------------------- */
-    // 영문 부분을 span으로 감싸서 라인하이트 조정
-    function wrapEnglishText(text) {
-      // 영문, 숫자, 특수문자로 이루어진 단어만 감싸기 (띄어쓰기는 유지)
-      return text.replace(
-        /([A-Za-z0-9\.,;:!?'"()\[\]{}\-_+=*&%$#@~`|\\<>/]+)/g,
-        '<span class="english-text">$1</span>'
-      );
-    }
+      /* ---------------------- 텍스트 처리 함수 ---------------------- */
+      // 영문 부분을 span으로 감싸서 라인하이트 조정
+      function wrapEnglishText(text) {
+        // 영문, 숫자, 특수문자로 이루어진 단어만 감싸기 (띄어쓰기는 유지)
+        return text.replace(
+          /([A-Za-z0-9\.,;:!?'"()\[\]{}\-_+=*&%$#@~`|\\<>/]+)/g,
+          '<span class="english-text">$1</span>'
+        );
+      }
 
-    /* ---------------------- 슬라이드 생성 ---------------------- */
-    function createSlides() {
-      slides.forEach((s, index) => {
-        const el = document.createElement("article");
-        el.className = "slide";
+      /* ---------------------- 슬라이드 생성 ---------------------- */
+      function createSlides() {
+        slides.forEach((s, index) => {
+          const el = document.createElement("article");
+          el.className = "slide";
 
-        // 14, 16, 24번 슬라이드만 제목을 앞으로 내보냄
-        if (index === 14 || index === 16 || index === 24) {
-          el.classList.add("bring-title-front");
-        }
+          // 14, 16, 24번 슬라이드만 제목을 앞으로 내보냄
+          if (index === 14 || index === 16 || index === 24) {
+            el.classList.add("bring-title-front");
+          }
 
-        // Aluminum Can Decomposition (index 4) 식별 클래스 추가
-        if (index === 4) {
-          el.classList.add("slide-aluminum");
-        }
+          // Aluminum Can Decomposition (index 4) 식별 클래스 추가
+          if (index === 4) {
+            el.classList.add("slide-aluminum");
+          }
 
-        if (index === 0) {
-          el.innerHTML = "";
-        } else if (s.type === "ending") {
-          el.classList.add("ending-slide"); // 엔딩 슬라이드 식별 클래스 추가
-          // ending 페이지는 이미지 없이 처리
-          el.innerHTML = `
+          if (index === 0) {
+            el.innerHTML = "";
+          } else if (s.type === "ending") {
+            el.classList.add("ending-slide"); // 엔딩 슬라이드 식별 클래스 추가
+            // ending 페이지는 이미지 없이 처리
+            el.innerHTML = `
             <div class="slide-name">${s.name}</div>
             <div class="slide-description-wrapper">
               <div class="slide-description">${s.description.replace(
-            /\n/g,
-            "<br>"
-          )}</div>
+                /\n/g,
+                "<br>"
+              )}</div>
             </div>
           `;
-        } else {
-          // content 슬라이드: index 1부터 30까지 각각 1.png ~ 30.png
-          const imageNumber = index; // index 1 = 1.png, index 2 = 2.png, ...
-          const photoContent = `<img src="pic/${imageNumber}.png" class="slide-photo-placeholder" alt="">`;
+          } else {
+            // content 슬라이드: index 1부터 30까지 각각 1.png ~ 30.png
+            const imageNumber = index; // index 1 = 1.png, index 2 = 2.png, ...
+            const photoContent = `<img src="pic/${imageNumber}.png" class="slide-photo-placeholder" alt="">`;
 
-          const koreanNameHtml = s.koreanName
-            ? `<div class="slide-korean-name">${s.koreanName}</div>`
-            : "";
+            const koreanNameHtml = s.koreanName
+              ? `<div class="slide-korean-name">${s.koreanName}</div>`
+              : "";
 
-          el.innerHTML = `
+            el.innerHTML = `
             <div class="slide-name">${s.name}</div>
             <div class="slide-photo-wrapper">
               ${photoContent}
@@ -839,523 +845,522 @@
             <div class="slide-description-wrapper">
               ${koreanNameHtml}
               <div class="slide-description">${wrapEnglishText(
-            s.description
-          )}</div>
+                s.description
+              )}</div>
             </div>
           `;
-        }
-        slidesTrackEl.appendChild(el);
-      });
-    }
-
-    /* ---------------------- 네비 버튼 ---------------------- */
-    function updateNavButtons() {
-      navPrevEl.disabled = currentIndex === 0;
-      navNextEl.disabled = currentIndex === slides.length - 1;
-    }
-
-    /* ---------------------- 슬라이드 이동 ---------------------- */
-    function goToSlide(i) {
-      if (i < 0 || i >= slides.length) return;
-
-      currentIndex = i;
-      slidesTrackEl.style.transform = `translateX(-${i * 100}%)`;
-
-      updateNavButtons();
-      updateYearsIndicator();
-      drawGraph();
-
-      if (currentIndex === 0) {
-        topBg.classList.remove("slide-out");
-      } else {
-        topBg.classList.add("slide-out");
+          }
+          slidesTrackEl.appendChild(el);
+        });
       }
-    }
 
-    navPrevEl.onclick = (e) => {
-      e.stopPropagation();
-      goToSlide(currentIndex - 1);
-    };
-    navNextEl.onclick = (e) => {
-      e.stopPropagation();
-      goToSlide(currentIndex + 1);
-    };
+      /* ---------------------- 네비 버튼 ---------------------- */
+      function updateNavButtons() {
+        navPrevEl.disabled = currentIndex === 0;
+        navNextEl.disabled = currentIndex === slides.length - 1;
+      }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") goToSlide(currentIndex - 1);
-      if (e.key === "ArrowRight") goToSlide(currentIndex + 1);
-    });
+      /* ---------------------- 슬라이드 이동 ---------------------- */
+      function goToSlide(i) {
+        if (i < 0 || i >= slides.length) return;
 
-    /* ---------------------- Years Indicator ---------------------- */
-    function updateYearsIndicator() {
-      const s = slides[currentIndex];
-      yearsValueEl.textContent =
-        s.type === "content" ? s.years.toLocaleString() : "00";
-    }
+        currentIndex = i;
+        slidesTrackEl.style.transform = `translateX(-${i * 100}%)`;
 
-    /* ----------------------------------------------------------
+        updateNavButtons();
+        updateYearsIndicator();
+        drawGraph();
+
+        if (currentIndex === 0) {
+          topBg.classList.remove("slide-out");
+        } else {
+          topBg.classList.add("slide-out");
+        }
+      }
+
+      navPrevEl.onclick = (e) => {
+        e.stopPropagation();
+        goToSlide(currentIndex - 1);
+      };
+      navNextEl.onclick = (e) => {
+        e.stopPropagation();
+        goToSlide(currentIndex + 1);
+      };
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") goToSlide(currentIndex - 1);
+        if (e.key === "ArrowRight") goToSlide(currentIndex + 1);
+      });
+
+      /* ---------------------- Years Indicator ---------------------- */
+      function updateYearsIndicator() {
+        const s = slides[currentIndex];
+        yearsValueEl.textContent =
+          s.type === "content" ? s.years.toLocaleString() : "00";
+      }
+
+      /* ----------------------------------------------------------
      그래프 : Retina(2x/3x)에서도 정확한 스케일 적용
   ---------------------------------------------------------- */
 
-    const alphaLevels = [1, 0.8, 0.6, 0.4, 0.25, 0.15];
+      const alphaLevels = [1, 0.8, 0.6, 0.4, 0.25, 0.15];
 
-    function resizeCanvas() {
-      const rect = graphCanvas.getBoundingClientRect();
-      const scale = window.devicePixelRatio;
+      function resizeCanvas() {
+        const rect = graphCanvas.getBoundingClientRect();
+        const scale = window.devicePixelRatio;
 
-      graphCanvas.width = rect.width * scale;
-      graphCanvas.height = rect.height * scale;
+        graphCanvas.width = rect.width * scale;
+        graphCanvas.height = rect.height * scale;
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(scale, scale);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(scale, scale);
 
-      drawGraph();
-    }
-    window.addEventListener("resize", resizeCanvas);
-
-    /* ---------------------- 축 그리기 (0~9 총 10개) ---------------------- */
-    function drawAxis(maxVal, leftMargin, currentSlideValue = null) {
-      const rect = graphCanvas.getBoundingClientRect();
-      const W = rect.width; // CSS width 기준
-      const H = rect.height;
-
-      const textY = 0;
-      const lineTop = 30;
-      const lineBottom = H;
-
-      const graphW = W - leftMargin;
-
-      ctx.save();
-      ctx.font = "300 16px Antonio, Cafe24ProSlim";
-      ctx.fillStyle = "#000";
-      ctx.textAlign = "right";
-      ctx.textBaseline = "top";
-
-      ctx.strokeStyle = "rgba(0,0,0,0.1)";
-      ctx.lineWidth = 1 / window.devicePixelRatio;
-
-      // 첫 페이지인지 확인 (maxVal이 1이고 currentSlideValue가 null일 때)
-      const isFirstPage = maxVal === 1 && currentSlideValue === null;
-
-      for (let i = 0; i <= 9; i++) {
-        const ratio = i / 9;
-        const x = leftMargin + ratio * graphW;
-
-        ctx.beginPath();
-        ctx.moveTo(x, lineTop);
-        ctx.lineTo(x, lineBottom);
-        ctx.stroke();
-
-        let val;
-        if (isFirstPage) {
-          // 첫 페이지일 때 모든 숫자를 0으로 표시
-          val = "0";
-        } else if (i === 9) {
-          val = currentSlideValue
-            ? currentSlideValue.toLocaleString()
-            : maxVal.toLocaleString();
-        } else {
-          val = Math.round((maxVal / 9) * i).toLocaleString();
-        }
-
-        ctx.fillText(val, x, textY);
+        drawGraph();
       }
+      window.addEventListener("resize", resizeCanvas);
 
-      ctx.restore();
-    }
+      /* ---------------------- 축 그리기 (0~9 총 10개) ---------------------- */
+      function drawAxis(maxVal, leftMargin, currentSlideValue = null) {
+        const rect = graphCanvas.getBoundingClientRect();
+        const W = rect.width; // CSS width 기준
+        const H = rect.height;
 
-    /* ---------------------- 그래프 그리기 ---------------------- */
-    function drawGraph() {
-      const rect = graphCanvas.getBoundingClientRect();
+        const textY = 0;
+        const lineTop = 30;
+        const lineBottom = H;
 
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      barData = []; // 막대 데이터 초기화
-
-      let usedCount = Math.min(
-        Math.max(currentIndex, 0),
-        contentSlides.length
-      );
-      const W = rect.width;
-      const H = rect.height;
-
-      const topMargin = 30;
-      const leftMargin = 120;
-      const graphH = H - topMargin;
-      const graphW = W - leftMargin;
-
-      const currentSlide = slides[currentIndex];
-      const currentSlideValue =
-        currentSlide && currentSlide.type === "content"
-          ? currentSlide.years
-          : null;
-
-      if (usedCount === 0) {
-        drawAxis(1, leftMargin, currentSlideValue);
-        return;
-      }
-
-      let used = contentSlides.slice(0, usedCount);
-      used.sort((a, b) => b.lifespan - a.lifespan);
-
-      const pageEl = document.querySelector(".page");
-      const isExpandedTop = pageEl.classList.contains("expanded-top");
-      const isExpandedBottom = pageEl.classList.contains("expanded-bottom");
-
-      if (isExpandedTop) {
-        // 상단 확장 시: 2개만 표시
-        used = used.slice(0, 2);
-      } else if (isExpandedBottom) {
-        // 하단 확장 시: 전체 표시 (자르지 않음)
-      } else {
-        // 기본 상태: 20개 제한
-        if (used.length > 20) {
-          used = used.slice(0, 20);
-        }
-      }
-      const displayCount = used.length;
-
-      const maxVal = used[0].lifespan;
-
-      drawAxis(maxVal, leftMargin, currentSlideValue);
-
-      let top3Height, otherHeight;
-
-      if (isExpandedTop) {
-        // 상단 확장 시: 2개가 절반씩 차지 (꽉 채움)
-        top3Height = graphH / 2;
-        otherHeight = 0;
-      } else if (isExpandedBottom) {
-        // 하단 확장 시: 모든 그래프 균등 분할
-        const unitHeight = graphH / displayCount;
-        top3Height = unitHeight;
-        otherHeight = unitHeight;
-      } else {
-        // 기본 상태
-        const threshold = 12;
-        if (displayCount <= threshold) {
-          let totalWeight = 0;
-          for (let i = 0; i < displayCount; i++) {
-            totalWeight += i < 3 ? 2 : 1;
-          }
-          const unitHeight = graphH / totalWeight;
-          top3Height = unitHeight * 2;
-          otherHeight = unitHeight;
-        } else {
-          top3Height = graphH * (2 / 15);
-          const remainingH = graphH - top3Height * 3;
-          otherHeight = remainingH / (displayCount - 3);
-        }
-      }
-
-      let currentY = topMargin;
-
-      used.forEach((item, i) => {
-        let barHeight;
-        if (isExpandedTop) {
-          barHeight = top3Height;
-        } else if (isExpandedBottom) {
-          barHeight = otherHeight;
-        } else {
-          barHeight = i < 3 ? top3Height : otherHeight;
-        }
-
-        const y = currentY;
-        currentY += barHeight;
-
-        const alpha = alphaLevels[i % alphaLevels.length];
-
-        ctx.fillStyle = `rgba(252, 81, 1, ${alpha})`;
-
-        const barWidth = (item.lifespan / maxVal) * graphW;
-
-        ctx.fillRect(leftMargin, y, barWidth, barHeight);
-
-        // 막대 정보 저장 (툴팁용) - 막대와 이름 영역 모두 포함
-        barData.push({
-          // 막대 영역
-          barX: leftMargin,
-          barY: y,
-          barWidth: barWidth,
-          barHeight: barHeight,
-          // 이름 영역 (좌측)
-          nameX: 0,
-          nameY: y,
-          nameWidth: leftMargin - 10,
-          nameHeight: barHeight,
-          item: item,
-        });
+        const graphW = W - leftMargin;
 
         ctx.save();
+        ctx.font = "300 16px Antonio, Cafe24ProSlim";
         ctx.fillStyle = "#000";
-        ctx.font = "300 11px Antonio, Cafe24ProSlim";
         ctx.textAlign = "right";
-        ctx.textBaseline = "middle";
-        // 하단 그래프에서는 br 태그를 제거하고 공백으로 변환 (연속된 공백은 하나로 합침)
-        const displayName = item.name
-          .replace(/<\/?br\s*\/?>/gi, " ")
-          .replace(/\s+/g, " ")
-          .trim();
-        ctx.fillText(displayName, leftMargin - 10, y + barHeight / 2);
-        ctx.restore();
-      });
+        ctx.textBaseline = "top";
 
-      drawAxis(maxVal, leftMargin, currentSlideValue);
-    }
+        ctx.strokeStyle = "rgba(0,0,0,0.1)";
+        ctx.lineWidth = 1 / window.devicePixelRatio;
 
-    /* ---------------------- 툴팁 기능 ---------------------- */
-    function getMousePos(canvas, evt) {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
+        // 첫 페이지인지 확인 (maxVal이 1이고 currentSlideValue가 null일 때)
+        const isFirstPage = maxVal === 1 && currentSlideValue === null;
 
-      return {
-        x: ((evt.clientX - rect.left) * scaleX) / window.devicePixelRatio,
-        y: ((evt.clientY - rect.top) * scaleY) / window.devicePixelRatio,
-      };
-    }
+        for (let i = 0; i <= 9; i++) {
+          const ratio = i / 9;
+          const x = leftMargin + ratio * graphW;
 
-    function showTooltip(clientX, clientY, item) {
-      const graphWrapper = document.querySelector(".graph-wrapper");
-      const rect = graphWrapper.getBoundingClientRect();
+          ctx.beginPath();
+          ctx.moveTo(x, lineTop);
+          ctx.lineTo(x, lineBottom);
+          ctx.stroke();
 
-      // 한글 이름이 있으면 한글 이름을, 없으면 영문 이름을 표시
-      const displayName = item.koreanName || item.name;
-
-      // 슬라이드의 description을 툴팁에 표시 (영문 부분 라인하이트 조정)
-      tooltip.innerHTML = `<strong>${displayName}</strong><div>${wrapEnglishText(
-        item.description
-      )}</div>`;
-      tooltip.style.left = clientX - rect.left + 10 + "px";
-      tooltip.style.top = clientY - rect.top - 10 + "px";
-      tooltip.classList.add("show");
-    }
-
-    function hideTooltip() {
-      tooltip.classList.remove("show");
-    }
-
-    // 마우스 이벤트 리스너
-    graphCanvas.addEventListener("mousemove", (e) => {
-      const mousePos = getMousePos(graphCanvas, e);
-      let found = false;
-
-      // console.log('Mouse pos:', mousePos, 'Bar count:', barData.length); // 디버깅
-
-      for (let bar of barData) {
-        // 막대 영역 체크
-        const inBar =
-          mousePos.x >= bar.barX &&
-          mousePos.x <= bar.barX + bar.barWidth &&
-          mousePos.y >= bar.barY &&
-          mousePos.y <= bar.barY + bar.barHeight;
-
-        // 이름 영역 체크
-        const inName =
-          mousePos.x >= bar.nameX &&
-          mousePos.x <= bar.nameX + bar.nameWidth &&
-          mousePos.y >= bar.nameY &&
-          mousePos.y <= bar.nameY + bar.nameHeight;
-
-        if (inBar || inName) {
-          // console.log('Found bar:', bar.item.name); // 디버깅
-          showTooltip(e.clientX, e.clientY, bar.item);
-          graphCanvas.style.cursor = "pointer";
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        hideTooltip();
-        graphCanvas.style.cursor = "pointer"; // 빈 공간도 클릭 가능하므로 포인터 유지
-      }
-    });
-
-    graphCanvas.addEventListener("mouseleave", () => {
-      hideTooltip();
-    });
-
-    // 클릭 이벤트 리스너
-    graphCanvas.addEventListener("click", (e) => {
-      const mousePos = getMousePos(graphCanvas, e);
-      let hitItem = false;
-
-      for (let bar of barData) {
-        // 막대 영역 체크
-        const inBar =
-          mousePos.x >= bar.barX &&
-          mousePos.x <= bar.barX + bar.barWidth &&
-          mousePos.y >= bar.barY &&
-          mousePos.y <= bar.barY + bar.barHeight;
-
-        // 이름 영역 체크
-        const inName =
-          mousePos.x >= bar.nameX &&
-          mousePos.x <= bar.nameX + bar.nameWidth &&
-          mousePos.y >= bar.nameY &&
-          mousePos.y <= bar.nameY + bar.nameHeight;
-
-        if (inBar || inName) {
-          hitItem = true;
-          e.stopPropagation(); // 그래프 요소 클릭 시 상위 전파 중단
-
-          // 해당 아이템의 슬라이드 인덱스 찾기
-          const slideIndex = contentSlides.findIndex(
-            (slide) =>
-              slide.name === bar.item.name && slide.years === bar.item.years
-          );
-
-          if (slideIndex !== -1) {
-            const targetIndex = slideIndex + 1; // 0은 커버 페이지
-
-            if (currentIndex === targetIndex) {
-              // 현재 보고 있는 슬라이드를 클릭 -> 토글
-              if (
-                pageEl.classList.contains("expanded-bottom") ||
-                pageEl.classList.contains("expanded-top")
-              ) {
-                // 확장 상태라면 무조건 초기화
-                pageEl.classList.remove("expanded-bottom");
-                pageEl.classList.remove("expanded-top");
-                pageEl.classList.remove("hover-bottom");
-                pageEl.classList.remove("hover-top");
-              } else {
-                // 기본 상태라면 하단 확장
-                pageEl.classList.add("expanded-bottom");
-                pageEl.classList.remove("hover-bottom");
-              }
-            } else {
-              // 다른 슬라이드 클릭 -> 이동
-              goToSlide(targetIndex);
-            }
+          let val;
+          if (isFirstPage) {
+            // 첫 페이지일 때 모든 숫자를 0으로 표시
+            val = "0";
+          } else if (i === 9) {
+            val = currentSlideValue
+              ? currentSlideValue.toLocaleString()
+              : maxVal.toLocaleString();
+          } else {
+            val = Math.round((maxVal / 9) * i).toLocaleString();
           }
-          break;
+
+          ctx.fillText(val, x, textY);
         }
+
+        ctx.restore();
       }
 
-      if (!hitItem) {
-        // 빈 공간 클릭 (축, 여백 등) -> 하단 화면 토글
-        e.stopPropagation();
-        if (
-          pageEl.classList.contains("expanded-bottom") ||
-          pageEl.classList.contains("expanded-top")
-        ) {
-          // 확장 상태라면 초기화
-          pageEl.classList.remove("expanded-bottom");
-          pageEl.classList.remove("expanded-top");
-          pageEl.classList.remove("hover-bottom");
-          pageEl.classList.remove("hover-top");
-        } else {
-          // 기본 상태라면 하단 확장
-          pageEl.classList.add("expanded-bottom");
-          pageEl.classList.remove("hover-bottom");
+      /* ---------------------- 그래프 그리기 ---------------------- */
+      function drawGraph() {
+        const rect = graphCanvas.getBoundingClientRect();
+
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        barData = []; // 막대 데이터 초기화
+
+        let usedCount = Math.min(
+          Math.max(currentIndex, 0),
+          contentSlides.length
+        );
+        const W = rect.width;
+        const H = rect.height;
+
+        const topMargin = 30;
+        const leftMargin = 120;
+        const graphH = H - topMargin;
+        const graphW = W - leftMargin;
+
+        const currentSlide = slides[currentIndex];
+        const currentSlideValue =
+          currentSlide && currentSlide.type === "content"
+            ? currentSlide.years
+            : null;
+
+        if (usedCount === 0) {
+          drawAxis(1, leftMargin, currentSlideValue);
+          return;
         }
+
+        let used = contentSlides.slice(0, usedCount);
+        used.sort((a, b) => b.lifespan - a.lifespan);
+
+        const pageEl = document.querySelector(".page");
+        const isExpandedTop = pageEl.classList.contains("expanded-top");
+        const isExpandedBottom = pageEl.classList.contains("expanded-bottom");
+
+        if (isExpandedTop) {
+          // 상단 확장 시: 2개만 표시
+          used = used.slice(0, 2);
+        } else if (isExpandedBottom) {
+          // 하단 확장 시: 전체 표시 (자르지 않음)
+        } else {
+          // 기본 상태: 20개 제한
+          if (used.length > 20) {
+            used = used.slice(0, 20);
+          }
+        }
+        const displayCount = used.length;
+
+        const maxVal = used[0].lifespan;
+
+        drawAxis(maxVal, leftMargin, currentSlideValue);
+
+        let top3Height, otherHeight;
+
+        if (isExpandedTop) {
+          // 상단 확장 시: 2개가 절반씩 차지 (꽉 채움)
+          top3Height = graphH / 2;
+          otherHeight = 0;
+        } else if (isExpandedBottom) {
+          // 하단 확장 시: 모든 그래프 균등 분할
+          const unitHeight = graphH / displayCount;
+          top3Height = unitHeight;
+          otherHeight = unitHeight;
+        } else {
+          // 기본 상태
+          const threshold = 12;
+          if (displayCount <= threshold) {
+            let totalWeight = 0;
+            for (let i = 0; i < displayCount; i++) {
+              totalWeight += i < 3 ? 2 : 1;
+            }
+            const unitHeight = graphH / totalWeight;
+            top3Height = unitHeight * 2;
+            otherHeight = unitHeight;
+          } else {
+            top3Height = graphH * (2 / 15);
+            const remainingH = graphH - top3Height * 3;
+            otherHeight = remainingH / (displayCount - 3);
+          }
+        }
+
+        let currentY = topMargin;
+
+        used.forEach((item, i) => {
+          let barHeight;
+          if (isExpandedTop) {
+            barHeight = top3Height;
+          } else if (isExpandedBottom) {
+            barHeight = otherHeight;
+          } else {
+            barHeight = i < 3 ? top3Height : otherHeight;
+          }
+
+          const y = currentY;
+          currentY += barHeight;
+
+          const alpha = alphaLevels[i % alphaLevels.length];
+
+          ctx.fillStyle = `rgba(252, 81, 1, ${alpha})`;
+
+          const barWidth = (item.lifespan / maxVal) * graphW;
+
+          ctx.fillRect(leftMargin, y, barWidth, barHeight);
+
+          // 막대 정보 저장 (툴팁용) - 막대와 이름 영역 모두 포함
+          barData.push({
+            // 막대 영역
+            barX: leftMargin,
+            barY: y,
+            barWidth: barWidth,
+            barHeight: barHeight,
+            // 이름 영역 (좌측)
+            nameX: 0,
+            nameY: y,
+            nameWidth: leftMargin - 10,
+            nameHeight: barHeight,
+            item: item,
+          });
+
+          ctx.save();
+          ctx.fillStyle = "#000";
+          ctx.font = "300 11px Antonio, Cafe24ProSlim";
+          ctx.textAlign = "right";
+          ctx.textBaseline = "middle";
+          // 하단 그래프에서는 br 태그를 제거하고 공백으로 변환 (연속된 공백은 하나로 합침)
+          const displayName = item.name
+            .replace(/<\/?br\s*\/?>/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          ctx.fillText(displayName, leftMargin - 10, y + barHeight / 2);
+          ctx.restore();
+        });
+
+        drawAxis(maxVal, leftMargin, currentSlideValue);
       }
-    });
 
-    /* ---------------------- 화면 비율 인터랙션 ---------------------- */
-    const pageEl = document.querySelector(".page");
-    const topSection = document.querySelector(".top");
-    const bottomSection = document.querySelector(".bottom");
-    const graphWrapper = document.querySelector(".graph-wrapper");
+      /* ---------------------- 툴팁 기능 ---------------------- */
+      function getMousePos(canvas, evt) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
 
-    if (topSection && bottomSection && pageEl) {
-      // 호버 이벤트
-      topSection.addEventListener("mouseenter", () => {
-        // 확장 상태가 아닐 때만 호버 효과 적용
-        if (
-          !pageEl.classList.contains("expanded-top") &&
-          !pageEl.classList.contains("expanded-bottom")
-        ) {
-          pageEl.classList.add("hover-top");
-          pageEl.classList.remove("hover-bottom");
+        return {
+          x: ((evt.clientX - rect.left) * scaleX) / window.devicePixelRatio,
+          y: ((evt.clientY - rect.top) * scaleY) / window.devicePixelRatio,
+        };
+      }
+
+      function showTooltip(clientX, clientY, item) {
+        const graphWrapper = document.querySelector(".graph-wrapper");
+        const rect = graphWrapper.getBoundingClientRect();
+
+        // 한글 이름이 있으면 한글 이름을, 없으면 영문 이름을 표시
+        const displayName = item.koreanName || item.name;
+
+        // 슬라이드의 description을 툴팁에 표시 (영문 부분 라인하이트 조정)
+        tooltip.innerHTML = `<strong>${displayName}</strong><div>${wrapEnglishText(
+          item.description
+        )}</div>`;
+        tooltip.style.left = clientX - rect.left + 10 + "px";
+        tooltip.style.top = clientY - rect.top - 10 + "px";
+        tooltip.classList.add("show");
+      }
+
+      function hideTooltip() {
+        tooltip.classList.remove("show");
+      }
+
+      // 마우스 이벤트 리스너
+      graphCanvas.addEventListener("mousemove", (e) => {
+        const mousePos = getMousePos(graphCanvas, e);
+        let found = false;
+
+        // console.log('Mouse pos:', mousePos, 'Bar count:', barData.length); // 디버깅
+
+        for (let bar of barData) {
+          // 막대 영역 체크
+          const inBar =
+            mousePos.x >= bar.barX &&
+            mousePos.x <= bar.barX + bar.barWidth &&
+            mousePos.y >= bar.barY &&
+            mousePos.y <= bar.barY + bar.barHeight;
+
+          // 이름 영역 체크
+          const inName =
+            mousePos.x >= bar.nameX &&
+            mousePos.x <= bar.nameX + bar.nameWidth &&
+            mousePos.y >= bar.nameY &&
+            mousePos.y <= bar.nameY + bar.nameHeight;
+
+          if (inBar || inName) {
+            // console.log('Found bar:', bar.item.name); // 디버깅
+            showTooltip(e.clientX, e.clientY, bar.item);
+            graphCanvas.style.cursor = "pointer";
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          hideTooltip();
+          graphCanvas.style.cursor = "pointer"; // 빈 공간도 클릭 가능하므로 포인터 유지
         }
       });
-      topSection.addEventListener("mouseleave", () => {
-        pageEl.classList.remove("hover-top");
+
+      graphCanvas.addEventListener("mouseleave", () => {
+        hideTooltip();
       });
 
-      bottomSection.addEventListener("mouseenter", () => {
-        if (
-          !pageEl.classList.contains("expanded-top") &&
-          !pageEl.classList.contains("expanded-bottom")
-        ) {
-          pageEl.classList.add("hover-bottom");
+      // 클릭 이벤트 리스너
+      graphCanvas.addEventListener("click", (e) => {
+        const mousePos = getMousePos(graphCanvas, e);
+        let hitItem = false;
+
+        for (let bar of barData) {
+          // 막대 영역 체크
+          const inBar =
+            mousePos.x >= bar.barX &&
+            mousePos.x <= bar.barX + bar.barWidth &&
+            mousePos.y >= bar.barY &&
+            mousePos.y <= bar.barY + bar.barHeight;
+
+          // 이름 영역 체크
+          const inName =
+            mousePos.x >= bar.nameX &&
+            mousePos.x <= bar.nameX + bar.nameWidth &&
+            mousePos.y >= bar.nameY &&
+            mousePos.y <= bar.nameY + bar.nameHeight;
+
+          if (inBar || inName) {
+            hitItem = true;
+            e.stopPropagation(); // 그래프 요소 클릭 시 상위 전파 중단
+
+            // 해당 아이템의 슬라이드 인덱스 찾기
+            const slideIndex = contentSlides.findIndex(
+              (slide) =>
+                slide.name === bar.item.name && slide.years === bar.item.years
+            );
+
+            if (slideIndex !== -1) {
+              const targetIndex = slideIndex + 1; // 0은 커버 페이지
+
+              if (currentIndex === targetIndex) {
+                // 현재 보고 있는 슬라이드를 클릭 -> 토글
+                if (
+                  pageEl.classList.contains("expanded-bottom") ||
+                  pageEl.classList.contains("expanded-top")
+                ) {
+                  // 확장 상태라면 무조건 초기화
+                  pageEl.classList.remove("expanded-bottom");
+                  pageEl.classList.remove("expanded-top");
+                  pageEl.classList.remove("hover-bottom");
+                  pageEl.classList.remove("hover-top");
+                } else {
+                  // 기본 상태라면 하단 확장
+                  pageEl.classList.add("expanded-bottom");
+                  pageEl.classList.remove("hover-bottom");
+                }
+              } else {
+                // 다른 슬라이드 클릭 -> 이동
+                goToSlide(targetIndex);
+              }
+            }
+            break;
+          }
+        }
+
+        if (!hitItem) {
+          // 빈 공간 클릭 (축, 여백 등) -> 하단 화면 토글
+          e.stopPropagation();
+          if (
+            pageEl.classList.contains("expanded-bottom") ||
+            pageEl.classList.contains("expanded-top")
+          ) {
+            // 확장 상태라면 초기화
+            pageEl.classList.remove("expanded-bottom");
+            pageEl.classList.remove("expanded-top");
+            pageEl.classList.remove("hover-bottom");
+            pageEl.classList.remove("hover-top");
+          } else {
+            // 기본 상태라면 하단 확장
+            pageEl.classList.add("expanded-bottom");
+            pageEl.classList.remove("hover-bottom");
+          }
+        }
+      });
+
+      /* ---------------------- 화면 비율 인터랙션 ---------------------- */
+      const pageEl = document.querySelector(".page");
+      const topSection = document.querySelector(".top");
+      const bottomSection = document.querySelector(".bottom");
+      const graphWrapper = document.querySelector(".graph-wrapper");
+
+      if (topSection && bottomSection && pageEl) {
+        // 호버 이벤트
+        topSection.addEventListener("mouseenter", () => {
+          // 확장 상태가 아닐 때만 호버 효과 적용
+          if (
+            !pageEl.classList.contains("expanded-top") &&
+            !pageEl.classList.contains("expanded-bottom")
+          ) {
+            pageEl.classList.add("hover-top");
+            pageEl.classList.remove("hover-bottom");
+          }
+        });
+        topSection.addEventListener("mouseleave", () => {
           pageEl.classList.remove("hover-top");
-        }
-      });
-      bottomSection.addEventListener("mouseleave", () => {
-        pageEl.classList.remove("hover-bottom");
-      });
+        });
 
-      // 클릭 확장 이벤트
-      topSection.addEventListener("click", () => {
-        if (
-          pageEl.classList.contains("expanded-top") ||
-          pageEl.classList.contains("expanded-bottom")
-        ) {
-          // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
-          pageEl.classList.remove("expanded-top");
-          pageEl.classList.remove("expanded-bottom");
-          pageEl.classList.remove("hover-top");
+        bottomSection.addEventListener("mouseenter", () => {
+          if (
+            !pageEl.classList.contains("expanded-top") &&
+            !pageEl.classList.contains("expanded-bottom")
+          ) {
+            pageEl.classList.add("hover-bottom");
+            pageEl.classList.remove("hover-top");
+          }
+        });
+        bottomSection.addEventListener("mouseleave", () => {
           pageEl.classList.remove("hover-bottom");
-        } else {
-          // 기본 상태 -> 상단 확장
-          pageEl.classList.add("expanded-top");
-          pageEl.classList.remove("hover-top");
-        }
-      });
+        });
 
-      bottomSection.addEventListener("click", () => {
-        if (
-          pageEl.classList.contains("expanded-bottom") ||
-          pageEl.classList.contains("expanded-top")
-        ) {
-          // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
-          pageEl.classList.remove("expanded-bottom");
-          pageEl.classList.remove("expanded-top");
-          pageEl.classList.remove("hover-bottom");
-          pageEl.classList.remove("hover-top");
-        } else {
-          // 기본 상태 -> 하단 확장
-          pageEl.classList.add("expanded-bottom");
-          pageEl.classList.remove("hover-bottom");
-        }
-      });
+        // 클릭 확장 이벤트
+        topSection.addEventListener("click", () => {
+          if (
+            pageEl.classList.contains("expanded-top") ||
+            pageEl.classList.contains("expanded-bottom")
+          ) {
+            // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
+            pageEl.classList.remove("expanded-top");
+            pageEl.classList.remove("expanded-bottom");
+            pageEl.classList.remove("hover-top");
+            pageEl.classList.remove("hover-bottom");
+          } else {
+            // 기본 상태 -> 상단 확장
+            pageEl.classList.add("expanded-top");
+            pageEl.classList.remove("hover-top");
+          }
+        });
 
-      bottomSection.addEventListener("click", () => {
-        if (pageEl.classList.contains("expanded-bottom")) {
-          // 이미 확장된 상태라면 -> 복귀 (50:50)
-          pageEl.classList.remove("expanded-bottom");
-          pageEl.classList.remove("hover-bottom");
-        } else {
-          // 그 외 (기본 상태거나 상단이 확장된 상태) -> 하단으로 바로 확장전환
-          pageEl.classList.remove("expanded-top");
-          pageEl.classList.remove("hover-top"); // 상단 호버/확장 클래스 모두 제거
+        bottomSection.addEventListener("click", () => {
+          if (
+            pageEl.classList.contains("expanded-bottom") ||
+            pageEl.classList.contains("expanded-top")
+          ) {
+            // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
+            pageEl.classList.remove("expanded-bottom");
+            pageEl.classList.remove("expanded-top");
+            pageEl.classList.remove("hover-bottom");
+            pageEl.classList.remove("hover-top");
+          } else {
+            // 기본 상태 -> 하단 확장
+            pageEl.classList.add("expanded-bottom");
+            pageEl.classList.remove("hover-bottom");
+          }
+        });
 
-          pageEl.classList.add("expanded-bottom");
-          pageEl.classList.remove("hover-bottom");
-        }
-      });
-    }
+        bottomSection.addEventListener("click", () => {
+          if (pageEl.classList.contains("expanded-bottom")) {
+            // 이미 확장된 상태라면 -> 복귀 (50:50)
+            pageEl.classList.remove("expanded-bottom");
+            pageEl.classList.remove("hover-bottom");
+          } else {
+            // 그 외 (기본 상태거나 상단이 확장된 상태) -> 하단으로 바로 확장전환
+            pageEl.classList.remove("expanded-top");
+            pageEl.classList.remove("hover-top"); // 상단 호버/확장 클래스 모두 제거
 
-    // 그래프 화면 크기 변경 감지하여 캔버스 리사이징 (애니메이션 지원)
-    if (graphWrapper && window.ResizeObserver) {
-      const ro = new ResizeObserver(() => {
+            pageEl.classList.add("expanded-bottom");
+            pageEl.classList.remove("hover-bottom");
+          }
+        });
+      }
+
+      // 그래프 화면 크기 변경 감지하여 캔버스 리사이징 (애니메이션 지원)
+      if (graphWrapper && window.ResizeObserver) {
+        const ro = new ResizeObserver(() => {
+          resizeCanvas();
+        });
+        ro.observe(graphWrapper);
+      }
+
+      /* ---------------------- 초기화 ---------------------- */
+      function init() {
+        createSlides();
         resizeCanvas();
-      });
-      ro.observe(graphWrapper);
-    }
+        goToSlide(0);
+      }
 
-    /* ---------------------- 초기화 ---------------------- */
-    function init() {
-      createSlides();
-      resizeCanvas();
-      goToSlide(0);
-    }
-
-    init();
-  </script>
-</body>
-
+      init();
+    </script>
+  </body>
 </html>
