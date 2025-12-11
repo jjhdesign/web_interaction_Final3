@@ -7,12 +7,12 @@
 
   <!-- Pretendard 웹폰트 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
   <style>
     @font-face {
-      font-family: 'Cafe24ProSlim';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Light.woff2') format('woff2');
+      font-family: "Cafe24ProSlim";
+      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Light.woff2") format("woff2");
       font-weight: 300;
       font-display: swap;
     }
@@ -97,7 +97,7 @@
     }
 
     .logo-main-title {
-      font-family: 'Antonio', sans-serif;
+      font-family: "Antonio", sans-serif;
       font-size: 14vw;
       font-weight: 700;
       line-height: 0.85;
@@ -110,7 +110,7 @@
     .logo-sub {
       display: flex;
       align-items: center;
-      font-family: 'Antonio', sans-serif;
+      font-family: "Antonio", sans-serif;
       font-size: 2vw;
       font-weight: 400;
       gap: 12px;
@@ -167,7 +167,6 @@
       top: -3px;
       /* 시각적 중앙 정렬 보정 */
     }
-
 
     /* 상단 레이아웃 */
     .top {
@@ -367,7 +366,7 @@
       font-weight: 700;
       line-height: 0.95;
       text-transform: uppercase;
-      color: #FC5101;
+      color: #fc5101;
       letter-spacing: -0.05em;
       white-space: pre-line;
       transition: font-size 0.4s ease;
@@ -391,7 +390,8 @@
       transform: translate(-50%, -50%);
       width: 45%;
       height: 100%;
-      transition: width 0.4s ease, height 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.5s ease;
+      transition: width 0.4s ease, height 0.4s ease,
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.5s ease;
       /* z-index removed to default to auto (below description) */
     }
 
@@ -404,6 +404,7 @@
 
     /* 상단 확장 상태에서 이미지 호버 시 z-index 상승 및 떠오르는 효과 */
     .page.expanded-top .slide-photo-wrapper:hover {
+      z-index: 50;
       /* indicator(90)보다는 낮고, description보다는 높게 */
       transform: translate(-50%, -50%) scale(1.05);
       filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6));
@@ -520,11 +521,10 @@
 
 <body>
   <div class="page">
-
     <!-- 상단 -->
     <section class="top">
       <div class="top-background" id="topBg">
-        <img src="pic/main3.jpg" class="bg-main3" alt="">
+        <img src="pic/main3.jpg" class="bg-main3" alt="" />
         <!-- 로고 HTML 구현 -->
         <div class="logo-container">
           <div class="logo-sub top">
@@ -573,176 +573,176 @@
         eng: "Human Lifespan",
         kor: "인간 평균 수명",
         time: 80,
-        desc: "인간이 생물학적·의학적 조건에 따라 평균적으로 생존하는 기간을 의미하며, 전 세계 인구 통계를 기반으로 산출된 보편적 평균값이다."
+        desc: "인간이 생물학적·의학적 조건에 따라 평균적으로 생존하는 기간을 의미하며, 전 세계 인구 통계를 기반으로 산출된 보편적 평균값이다.",
       },
       {
         eng: "Metal Can Decomposition",
         kor: "금속 캔 분해 기간",
         time: 100,
-        desc: "철 또는 주석으로 만들어진 금속 캔이 환경 속에서 부식과 산화 과정을 거쳐 원래 형태를 상실하고 자연적 분해 상태에 도달하기까지 걸리는 예상 기간이다."
+        desc: "철 또는 주석으로 만들어진 금속 캔이 환경 속에서 부식과 산화 과정을 거쳐 원래 형태를 상실하고 자연적 분해 상태에 도달하기까지 걸리는 예상 기간이다.",
       },
       {
         eng: "Sea Turtle Lifespan",
         kor: "바다거북 수명",
         time: 120,
-        desc: "바다거북이 자연 환경에서 생존할 수 있는 평균적 수명으로, 일부 개체는 120년 이상 생존한 사례가 보고되어 있다."
+        desc: "바다거북이 자연 환경에서 생존할 수 있는 평균적 수명으로, 일부 개체는 120년 이상 생존한 사례가 보고되어 있다.",
       },
       {
         eng: "Aluminum Can Decomposition",
         kor: "알루미늄 캔 분해 기간",
         time: 150,
-        desc: "알루미늄 소재가 자연에서 산화에 의해 구조적 안정성을 잃고 분해되기까지 필요한 시간으로, 제조 방식과 환경에 따라 차이가 발생한다."
+        desc: "알루미늄 소재가 자연에서 산화에 의해 구조적 안정성을 잃고 분해되기까지 필요한 시간으로, 제조 방식과 환경에 따라 차이가 발생한다.",
       },
       {
         eng: "Bowhead Whale </br>Lifespan",
         kor: "북극고래 수명",
         time: 200,
-        desc: "북극 해역에 서식하는 고래류의 생물학적 수명으로, 눈 수정체 분석 등을 통해 약 200년 전후의 생존 기간이 추정된다."
+        desc: "북극 해역에 서식하는 고래류의 생물학적 수명으로, 눈 수정체 분석 등을 통해 약 200년 전후의 생존 기간이 추정된다.",
       },
       {
         eng: "Greenland Shark </br>Lifespan",
         kor: "그린란드 상어 수명",
         time: 392,
-        desc: "그린란드 상어의 수명은 방사성 탄소 분석을 기반으로 약 392년 전후로 추정되며, 매우 느린 성장 속도가 특징이다."
+        desc: "그린란드 상어의 수명은 방사성 탄소 분석을 기반으로 약 392년 전후로 추정되며, 매우 느린 성장 속도가 특징이다.",
       },
       {
         eng: "PET Plastic Decomposition",
         kor: "PET 플라스틱 분해 기간",
         time: 450,
-        desc: "폴리에틸렌 테레프탈레이트가 환경에서 광분해와 열화 과정을 거쳐 구조가 붕괴되기까지 걸리는 기간을 의미한다."
+        desc: "폴리에틸렌 테레프탈레이트가 환경에서 광분해와 열화 과정을 거쳐 구조가 붕괴되기까지 걸리는 기간을 의미한다.",
       },
       {
         eng: "Glass Bottle Decomposition",
         kor: "유리병 분해 기간",
         time: 500,
-        desc: "규사 기반의 유리병이 자연에서 화학적 반응이나 침식 작용을 겪어 분해되기까지 필요한 기간은 일반적으로 매우 길고 약 500년 이상으로 추정된다."
+        desc: "규사 기반의 유리병이 자연에서 화학적 반응이나 침식 작용을 겪어 분해되기까지 필요한 기간은 일반적으로 매우 길고 약 500년 이상으로 추정된다.",
       },
       {
         eng: "Ocean Quahog Lifespan",
         kor: "대서양 조개 수명",
         time: 507,
-        desc: "아르크티카 아일란디카 종의 조개는 패각 성장층 분석을 통해 507년 이상 생존한 개체가 발견된 장수 생물로 알려져 있다."
+        desc: "아르크티카 아일란디카 종의 조개는 패각 성장층 분석을 통해 507년 이상 생존한 개체가 발견된 장수 생물로 알려져 있다.",
       },
       {
         eng: "Roman Civilization",
         kor: "고대 로마 문명",
         time: 2206,
-        desc: "로마 왕정 시기부터 동로마 제국의 쇠퇴까지 이어진 문명의 존속 기간으로, 정치적·행정적 연속성을 기준으로 산출된다."
+        desc: "로마 왕정 시기부터 동로마 제국의 쇠퇴까지 이어진 문명의 존속 기간으로, 정치적·행정적 연속성을 기준으로 산출된다.",
       },
       {
         eng: "Ancient Egyptian Dynasties",
         kor: "고대 이집트 왕조",
         time: 3000,
-        desc: "고대 이집트의 초기 왕조부터 후기 왕조까지 지속된 파라오 중심의 통치 체계를 의미하며, 약 3000년 동안 이어진 것으로 추정된다."
+        desc: "고대 이집트의 초기 왕조부터 후기 왕조까지 지속된 파라오 중심의 통치 체계를 의미하며, 약 3000년 동안 이어진 것으로 추정된다.",
       },
       {
         eng: "Bristlecone Pine",
         kor: "브리슬콘 소나무",
         time: 5000,
-        desc: "미국 서부 고산 지대의 소나무 종으로, 연륜 분석을 통해 5000년 이상 생존한 개체가 확인된 장수 식물이다."
+        desc: "미국 서부 고산 지대의 소나무 종으로, 연륜 분석을 통해 5000년 이상 생존한 개체가 확인된 장수 식물이다.",
       },
       {
         eng: "Earliest Civilization",
         kor: "가장 오래된 문명",
         time: 6000,
-        desc: "메소포타미아 지역에서 도시·문자·행정 체계가 형성되며 문명적 특징이 나타난 시점으로 약 6000년 전으로 알려져 있다."
+        desc: "메소포타미아 지역에서 도시·문자·행정 체계가 형성되며 문명적 특징이 나타난 시점으로 약 6000년 전으로 알려져 있다.",
       },
       {
         eng: "Jomon </br>Sugi",
         kor: "조몬 스기",
         time: 7000,
-        desc: "일본 야쿠시마 섬의 삼나무로, 나이테 분석 등을 통해 약 7000년 전후로 추정되는 오래된 개체가 보고되어 있다."
+        desc: "일본 야쿠시마 섬의 삼나무로, 나이테 분석 등을 통해 약 7000년 전후로 추정되는 오래된 개체가 보고되어 있다.",
       },
       {
         eng: "Oldest </br>Pottery",
         kor: "가장 오래된 도자기",
         time: 20000,
-        desc: "중국 장시성 선인동 유적에서 발굴된 초기 도자기 조각으로, 열처리된 점토 분석을 통해 약 2만 년 전 제작된 것으로 판단된다."
+        desc: "중국 장시성 선인동 유적에서 발굴된 초기 도자기 조각으로, 열처리된 점토 분석을 통해 약 2만 년 전 제작된 것으로 판단된다.",
       },
       {
         eng: "Oldest Cave Painting",
         kor: "가장 오래된 동굴벽화",
         time: 45000,
-        desc: "인도네시아 술라웨시 섬에서 발견된 동굴벽화로, 방사성 연대 측정 결과 약 4만 5천 년 전에 제작된 것으로 분석된다."
+        desc: "인도네시아 술라웨시 섬에서 발견된 동굴벽화로, 방사성 연대 측정 결과 약 4만 5천 년 전에 제작된 것으로 분석된다.",
       },
       {
         eng: "Homo </br>Sapiens </br>Emergence",
         kor: "현생 인류 등장",
         time: 300000,
-        desc: "해부학적 현대 인류인 호모 사피엔스가 출현한 시점으로, 화석과 유전학 기반 분석에 따라 약 30만 년 전으로 추정된다."
+        desc: "해부학적 현대 인류인 호모 사피엔스가 출현한 시점으로, 화석과 유전학 기반 분석에 따라 약 30만 년 전으로 추정된다.",
       },
       {
         eng: "Himalayan Formation",
         kor: "히말라야 산맥 형성",
         time: 50000000,
-        desc: "인도판과 유라시아판의 충돌로 인해 지각이 융기하며 히말라야 산맥이 형성되기 시작한 시점으로 약 5000만 년 전으로 추정된다."
+        desc: "인도판과 유라시아판의 충돌로 인해 지각이 융기하며 히말라야 산맥이 형성되기 시작한 시점으로 약 5000만 년 전으로 추정된다.",
       },
       {
         eng: "Dinosaur </br>Era",
         kor: "공룡 존재 기간",
         time: 165000000,
-        desc: "트라이아스기 후기부터 백악기 말까지 공룡류가 지구에 서식한 기간으로 약 1억 6500만 년 동안 지속되었다."
+        desc: "트라이아스기 후기부터 백악기 말까지 공룡류가 지구에 서식한 기간으로 약 1억 6500만 년 동안 지속되었다.",
       },
       {
         eng: "First Mammals",
         kor: "최초의 포유류 등장",
         time: 200000000,
-        desc: "최초의 포유류인 브라질로돈 쿼드랑굴라리스가 지구에 출현한 시점으로, 화석 기록을 기반으로 약 2억 년 전으로 추정된다."
+        desc: "최초의 포유류인 브라질로돈 쿼드랑굴라리스가 지구에 출현한 시점으로, 화석 기록을 기반으로 약 2억 년 전으로 추정된다.",
       },
       {
         eng: "First Life on Earth",
         kor: "최초의 생명 등장",
         time: 3700000000,
-        desc: "지구 초기 해양에서 원시 미생물이 처음 나타난 시점으로, 미세 화석과 지질학적 분석을 통해 약 37억 년 전으로 추정된다."
+        desc: "지구 초기 해양에서 원시 미생물이 처음 나타난 시점으로, 미세 화석과 지질학적 분석을 통해 약 37억 년 전으로 추정된다.",
       },
       {
         eng: "Moon Formation",
         kor: "달 생성",
         time: 4500000000,
-        desc: "초기 지구에 대형 천체가 충돌하여 발생한 파편이 응집되면서 달이 형성된 것으로 설명되는 충돌 기원설에 기반한다."
+        desc: "초기 지구에 대형 천체가 충돌하여 발생한 파편이 응집되면서 달이 형성된 것으로 설명되는 충돌 기원설에 기반한다.",
       },
       {
         eng: "Earth Age",
         kor: "지구 나이",
         time: 4540000000,
-        desc: "방사성 동위원소 연대 측정을 통해 계산된 지구의 연령으로, 지각 물질 및 운석의 연대를 분석해 약 45억 4천만 년으로 산출된다."
+        desc: "방사성 동위원소 연대 측정을 통해 계산된 지구의 연령으로, 지각 물질 및 운석의 연대를 분석해 약 45억 4천만 년으로 산출된다.",
       },
       {
         eng: "Sun Age",
         kor: "태양의 나이",
         time: 4600000000,
-        desc: "태양이 분자 구름의 붕괴로 형성된 이후 핵융합을 시작하기까지의 경과 시간으로 약 46억 년이다."
+        desc: "태양이 분자 구름의 붕괴로 형성된 이후 핵융합을 시작하기까지의 경과 시간으로 약 46억 년이다.",
       },
       {
         eng: "Oldest </br>Planet",
         kor: "가장 오래된 행성",
         time: 12700000000,
-        desc: "PSR B1620–26 b로 알려진 외계 행성의 연령으로, 주변 항성과 성단의 특성을 기반으로 약 127억 년 전 형성된 것으로 추정된다."
+        desc: "PSR B1620–26 b로 알려진 외계 행성의 연령으로, 주변 항성과 성단의 특성을 기반으로 약 127억 년 전 형성된 것으로 추정된다.",
       },
       {
         eng: "Oldest </br>Black Hole",
         kor: "가장 오래된 블랙홀",
         time: 13000000000,
-        desc: "고적색편이 은하 GN-z11 중심부의 초대질량 블랙홀로, 우주 초기 단계에서 이미 형성된 것으로 분석되며 약 130억 년 이상으로 추정된다."
+        desc: "고적색편이 은하 GN-z11 중심부의 초대질량 블랙홀로, 우주 초기 단계에서 이미 형성된 것으로 분석되며 약 130억 년 이상으로 추정된다.",
       },
       {
         eng: "Oldest Star",
         kor: "가장 오래된 항성",
         time: 13200000000,
-        desc: "HE 1523–0901 항성의 금속함량 및 핵종 붕괴 모델을 기반으로 한 분석 결과, 약 132억 년 된 항성으로 분류된다."
+        desc: "HE 1523–0901 항성의 금속함량 및 핵종 붕괴 모델을 기반으로 한 분석 결과, 약 132억 년 된 항성으로 분류된다.",
       },
       {
         eng: "Milky Way Formation",
         kor: "우리 은하 형성",
         time: 13500000000,
-        desc: "가스와 암흑물질이 응축하면서 초기 은하 구조가 형성된 시점으로, 여러 천문 관측 자료를 기반으로 약 135억 년 전으로 추정된다."
+        desc: "가스와 암흑물질이 응축하면서 초기 은하 구조가 형성된 시점으로, 여러 천문 관측 자료를 기반으로 약 135억 년 전으로 추정된다.",
       },
       {
         eng: "Age of the Universe",
         kor: "우주의 나이",
         time: 13800000000,
-        desc: "빅뱅 이후 우주가 팽창해 온 전체 경과 시간으로, 허블 상수와 우주 배경복사 분석 등을 통해 약 138억 년으로 산출된다."
-      }
+        desc: "빅뱅 이후 우주가 팽창해 온 전체 경과 시간으로, 허블 상수와 우주 배경복사 분석 등을 통해 약 138억 년으로 산출된다.",
+      },
     ];
 
     const contentSlides = lifespanData.map((item) => {
@@ -759,7 +759,13 @@
     const slides = [
       { type: "cover", name: "", years: 0, description: "" },
       ...contentSlides,
-      { type: "ending", name: "THANK YOU\nFOR WATCHING", years: 0, description: "2025-2 Web Interaction Final Project\njasonjeong@seoultech.ac.kr\nCopyright ⓒ 2025 JaeHyun Jeong. All rights reserved." },
+      {
+        type: "ending",
+        name: "THANK YOU\nFOR WATCHING",
+        years: 0,
+        description:
+          "2025-2 Web Interaction Final Project\njasonjeong@seoultech.ac.kr\nCopyright ⓒ 2025 JaeHyun Jeong. All rights reserved.",
+      },
     ];
 
     /* ---------------------- DOM ---------------------- */
@@ -779,7 +785,10 @@
     // 영문 부분을 span으로 감싸서 라인하이트 조정
     function wrapEnglishText(text) {
       // 영문, 숫자, 특수문자로 이루어진 단어만 감싸기 (띄어쓰기는 유지)
-      return text.replace(/([A-Za-z0-9\.,;:!?'"()\[\]{}\-_+=*&%$#@~`|\\<>/]+)/g, '<span class="english-text">$1</span>');
+      return text.replace(
+        /([A-Za-z0-9\.,;:!?'"()\[\]{}\-_+=*&%$#@~`|\\<>/]+)/g,
+        '<span class="english-text">$1</span>'
+      );
     }
 
     /* ---------------------- 슬라이드 생성 ---------------------- */
@@ -806,7 +815,10 @@
           el.innerHTML = `
             <div class="slide-name">${s.name}</div>
             <div class="slide-description-wrapper">
-              <div class="slide-description">${s.description.replace(/\n/g, '<br>')}</div>
+              <div class="slide-description">${s.description.replace(
+            /\n/g,
+            "<br>"
+          )}</div>
             </div>
           `;
         } else {
@@ -816,7 +828,7 @@
 
           const koreanNameHtml = s.koreanName
             ? `<div class="slide-korean-name">${s.koreanName}</div>`
-            : '';
+            : "";
 
           el.innerHTML = `
             <div class="slide-name">${s.name}</div>
@@ -825,7 +837,9 @@
             </div>
             <div class="slide-description-wrapper">
               ${koreanNameHtml}
-              <div class="slide-description">${wrapEnglishText(s.description)}</div>
+              <div class="slide-description">${wrapEnglishText(
+            s.description
+          )}</div>
             </div>
           `;
         }
@@ -879,8 +893,8 @@
     }
 
     /* ----------------------------------------------------------
-       그래프 : Retina(2x/3x)에서도 정확한 스케일 적용
-    ---------------------------------------------------------- */
+     그래프 : Retina(2x/3x)에서도 정확한 스케일 적용
+  ---------------------------------------------------------- */
 
     const alphaLevels = [1, 0.8, 0.6, 0.4, 0.25, 0.15];
 
@@ -956,7 +970,10 @@
       ctx.clearRect(0, 0, rect.width, rect.height);
       barData = []; // 막대 데이터 초기화
 
-      let usedCount = Math.min(Math.max(currentIndex, 0), contentSlides.length);
+      let usedCount = Math.min(
+        Math.max(currentIndex, 0),
+        contentSlides.length
+      );
       const W = rect.width;
       const H = rect.height;
 
@@ -979,9 +996,9 @@
       let used = contentSlides.slice(0, usedCount);
       used.sort((a, b) => b.lifespan - a.lifespan);
 
-      const pageEl = document.querySelector('.page');
-      const isExpandedTop = pageEl.classList.contains('expanded-top');
-      const isExpandedBottom = pageEl.classList.contains('expanded-bottom');
+      const pageEl = document.querySelector(".page");
+      const isExpandedTop = pageEl.classList.contains("expanded-top");
+      const isExpandedBottom = pageEl.classList.contains("expanded-bottom");
 
       if (isExpandedTop) {
         // 상단 확장 시: 2개만 표시
@@ -1017,14 +1034,14 @@
         if (displayCount <= threshold) {
           let totalWeight = 0;
           for (let i = 0; i < displayCount; i++) {
-            totalWeight += (i < 3) ? 2 : 1;
+            totalWeight += i < 3 ? 2 : 1;
           }
           const unitHeight = graphH / totalWeight;
           top3Height = unitHeight * 2;
           otherHeight = unitHeight;
         } else {
           top3Height = graphH * (2 / 15);
-          const remainingH = graphH - (top3Height * 3);
+          const remainingH = graphH - top3Height * 3;
           otherHeight = remainingH / (displayCount - 3);
         }
       }
@@ -1038,7 +1055,7 @@
         } else if (isExpandedBottom) {
           barHeight = otherHeight;
         } else {
-          barHeight = (i < 3) ? top3Height : otherHeight;
+          barHeight = i < 3 ? top3Height : otherHeight;
         }
 
         const y = currentY;
@@ -1064,7 +1081,7 @@
           nameY: y,
           nameWidth: leftMargin - 10,
           nameHeight: barHeight,
-          item: item
+          item: item,
         });
 
         ctx.save();
@@ -1073,7 +1090,10 @@
         ctx.textAlign = "right";
         ctx.textBaseline = "middle";
         // 하단 그래프에서는 br 태그를 제거하고 공백으로 변환 (연속된 공백은 하나로 합침)
-        const displayName = item.name.replace(/<\/?br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
+        const displayName = item.name
+          .replace(/<\/?br\s*\/?>/gi, " ")
+          .replace(/\s+/g, " ")
+          .trim();
         ctx.fillText(displayName, leftMargin - 10, y + barHeight / 2);
         ctx.restore();
       });
@@ -1088,31 +1108,33 @@
       const scaleY = canvas.height / rect.height;
 
       return {
-        x: (evt.clientX - rect.left) * scaleX / window.devicePixelRatio,
-        y: (evt.clientY - rect.top) * scaleY / window.devicePixelRatio
+        x: ((evt.clientX - rect.left) * scaleX) / window.devicePixelRatio,
+        y: ((evt.clientY - rect.top) * scaleY) / window.devicePixelRatio,
       };
     }
 
     function showTooltip(clientX, clientY, item) {
-      const graphWrapper = document.querySelector('.graph-wrapper');
+      const graphWrapper = document.querySelector(".graph-wrapper");
       const rect = graphWrapper.getBoundingClientRect();
 
       // 한글 이름이 있으면 한글 이름을, 없으면 영문 이름을 표시
       const displayName = item.koreanName || item.name;
 
       // 슬라이드의 description을 툴팁에 표시 (영문 부분 라인하이트 조정)
-      tooltip.innerHTML = `<strong>${displayName}</strong><div>${wrapEnglishText(item.description)}</div>`;
-      tooltip.style.left = (clientX - rect.left + 10) + 'px';
-      tooltip.style.top = (clientY - rect.top - 10) + 'px';
-      tooltip.classList.add('show');
+      tooltip.innerHTML = `<strong>${displayName}</strong><div>${wrapEnglishText(
+        item.description
+      )}</div>`;
+      tooltip.style.left = clientX - rect.left + 10 + "px";
+      tooltip.style.top = clientY - rect.top - 10 + "px";
+      tooltip.classList.add("show");
     }
 
     function hideTooltip() {
-      tooltip.classList.remove('show');
+      tooltip.classList.remove("show");
     }
 
     // 마우스 이벤트 리스너
-    graphCanvas.addEventListener('mousemove', (e) => {
+    graphCanvas.addEventListener("mousemove", (e) => {
       const mousePos = getMousePos(graphCanvas, e);
       let found = false;
 
@@ -1120,17 +1142,23 @@
 
       for (let bar of barData) {
         // 막대 영역 체크
-        const inBar = mousePos.x >= bar.barX && mousePos.x <= bar.barX + bar.barWidth &&
-          mousePos.y >= bar.barY && mousePos.y <= bar.barY + bar.barHeight;
+        const inBar =
+          mousePos.x >= bar.barX &&
+          mousePos.x <= bar.barX + bar.barWidth &&
+          mousePos.y >= bar.barY &&
+          mousePos.y <= bar.barY + bar.barHeight;
 
         // 이름 영역 체크
-        const inName = mousePos.x >= bar.nameX && mousePos.x <= bar.nameX + bar.nameWidth &&
-          mousePos.y >= bar.nameY && mousePos.y <= bar.nameY + bar.nameHeight;
+        const inName =
+          mousePos.x >= bar.nameX &&
+          mousePos.x <= bar.nameX + bar.nameWidth &&
+          mousePos.y >= bar.nameY &&
+          mousePos.y <= bar.nameY + bar.nameHeight;
 
         if (inBar || inName) {
           // console.log('Found bar:', bar.item.name); // 디버깅
           showTooltip(e.clientX, e.clientY, bar.item);
-          graphCanvas.style.cursor = 'pointer';
+          graphCanvas.style.cursor = "pointer";
           found = true;
           break;
         }
@@ -1138,35 +1166,42 @@
 
       if (!found) {
         hideTooltip();
-        graphCanvas.style.cursor = 'pointer'; // 빈 공간도 클릭 가능하므로 포인터 유지
+        graphCanvas.style.cursor = "pointer"; // 빈 공간도 클릭 가능하므로 포인터 유지
       }
     });
 
-    graphCanvas.addEventListener('mouseleave', () => {
+    graphCanvas.addEventListener("mouseleave", () => {
       hideTooltip();
     });
 
     // 클릭 이벤트 리스너
-    graphCanvas.addEventListener('click', (e) => {
+    graphCanvas.addEventListener("click", (e) => {
       const mousePos = getMousePos(graphCanvas, e);
       let hitItem = false;
 
       for (let bar of barData) {
         // 막대 영역 체크
-        const inBar = mousePos.x >= bar.barX && mousePos.x <= bar.barX + bar.barWidth &&
-          mousePos.y >= bar.barY && mousePos.y <= bar.barY + bar.barHeight;
+        const inBar =
+          mousePos.x >= bar.barX &&
+          mousePos.x <= bar.barX + bar.barWidth &&
+          mousePos.y >= bar.barY &&
+          mousePos.y <= bar.barY + bar.barHeight;
 
         // 이름 영역 체크
-        const inName = mousePos.x >= bar.nameX && mousePos.x <= bar.nameX + bar.nameWidth &&
-          mousePos.y >= bar.nameY && mousePos.y <= bar.nameY + bar.nameHeight;
+        const inName =
+          mousePos.x >= bar.nameX &&
+          mousePos.x <= bar.nameX + bar.nameWidth &&
+          mousePos.y >= bar.nameY &&
+          mousePos.y <= bar.nameY + bar.nameHeight;
 
         if (inBar || inName) {
           hitItem = true;
           e.stopPropagation(); // 그래프 요소 클릭 시 상위 전파 중단
 
           // 해당 아이템의 슬라이드 인덱스 찾기
-          const slideIndex = contentSlides.findIndex(slide =>
-            slide.name === bar.item.name && slide.years === bar.item.years
+          const slideIndex = contentSlides.findIndex(
+            (slide) =>
+              slide.name === bar.item.name && slide.years === bar.item.years
           );
 
           if (slideIndex !== -1) {
@@ -1174,16 +1209,19 @@
 
             if (currentIndex === targetIndex) {
               // 현재 보고 있는 슬라이드를 클릭 -> 토글
-              if (pageEl.classList.contains('expanded-bottom') || pageEl.classList.contains('expanded-top')) {
+              if (
+                pageEl.classList.contains("expanded-bottom") ||
+                pageEl.classList.contains("expanded-top")
+              ) {
                 // 확장 상태라면 무조건 초기화
-                pageEl.classList.remove('expanded-bottom');
-                pageEl.classList.remove('expanded-top');
-                pageEl.classList.remove('hover-bottom');
-                pageEl.classList.remove('hover-top');
+                pageEl.classList.remove("expanded-bottom");
+                pageEl.classList.remove("expanded-top");
+                pageEl.classList.remove("hover-bottom");
+                pageEl.classList.remove("hover-top");
               } else {
                 // 기본 상태라면 하단 확장
-                pageEl.classList.add('expanded-bottom');
-                pageEl.classList.remove('hover-bottom');
+                pageEl.classList.add("expanded-bottom");
+                pageEl.classList.remove("hover-bottom");
               }
             } else {
               // 다른 슬라이드 클릭 -> 이동
@@ -1197,90 +1235,105 @@
       if (!hitItem) {
         // 빈 공간 클릭 (축, 여백 등) -> 하단 화면 토글
         e.stopPropagation();
-        if (pageEl.classList.contains('expanded-bottom') || pageEl.classList.contains('expanded-top')) {
+        if (
+          pageEl.classList.contains("expanded-bottom") ||
+          pageEl.classList.contains("expanded-top")
+        ) {
           // 확장 상태라면 초기화
-          pageEl.classList.remove('expanded-bottom');
-          pageEl.classList.remove('expanded-top');
-          pageEl.classList.remove('hover-bottom');
-          pageEl.classList.remove('hover-top');
+          pageEl.classList.remove("expanded-bottom");
+          pageEl.classList.remove("expanded-top");
+          pageEl.classList.remove("hover-bottom");
+          pageEl.classList.remove("hover-top");
         } else {
           // 기본 상태라면 하단 확장
-          pageEl.classList.add('expanded-bottom');
-          pageEl.classList.remove('hover-bottom');
+          pageEl.classList.add("expanded-bottom");
+          pageEl.classList.remove("hover-bottom");
         }
       }
     });
 
     /* ---------------------- 화면 비율 인터랙션 ---------------------- */
-    const pageEl = document.querySelector('.page');
-    const topSection = document.querySelector('.top');
-    const bottomSection = document.querySelector('.bottom');
-    const graphWrapper = document.querySelector('.graph-wrapper');
+    const pageEl = document.querySelector(".page");
+    const topSection = document.querySelector(".top");
+    const bottomSection = document.querySelector(".bottom");
+    const graphWrapper = document.querySelector(".graph-wrapper");
 
     if (topSection && bottomSection && pageEl) {
       // 호버 이벤트
-      topSection.addEventListener('mouseenter', () => {
+      topSection.addEventListener("mouseenter", () => {
         // 확장 상태가 아닐 때만 호버 효과 적용
-        if (!pageEl.classList.contains('expanded-top') && !pageEl.classList.contains('expanded-bottom')) {
-          pageEl.classList.add('hover-top');
-          pageEl.classList.remove('hover-bottom');
+        if (
+          !pageEl.classList.contains("expanded-top") &&
+          !pageEl.classList.contains("expanded-bottom")
+        ) {
+          pageEl.classList.add("hover-top");
+          pageEl.classList.remove("hover-bottom");
         }
       });
-      topSection.addEventListener('mouseleave', () => {
-        pageEl.classList.remove('hover-top');
+      topSection.addEventListener("mouseleave", () => {
+        pageEl.classList.remove("hover-top");
       });
 
-      bottomSection.addEventListener('mouseenter', () => {
-        if (!pageEl.classList.contains('expanded-top') && !pageEl.classList.contains('expanded-bottom')) {
-          pageEl.classList.add('hover-bottom');
-          pageEl.classList.remove('hover-top');
+      bottomSection.addEventListener("mouseenter", () => {
+        if (
+          !pageEl.classList.contains("expanded-top") &&
+          !pageEl.classList.contains("expanded-bottom")
+        ) {
+          pageEl.classList.add("hover-bottom");
+          pageEl.classList.remove("hover-top");
         }
       });
-      bottomSection.addEventListener('mouseleave', () => {
-        pageEl.classList.remove('hover-bottom');
+      bottomSection.addEventListener("mouseleave", () => {
+        pageEl.classList.remove("hover-bottom");
       });
 
       // 클릭 확장 이벤트
-      topSection.addEventListener('click', () => {
-        if (pageEl.classList.contains('expanded-top') || pageEl.classList.contains('expanded-bottom')) {
+      topSection.addEventListener("click", () => {
+        if (
+          pageEl.classList.contains("expanded-top") ||
+          pageEl.classList.contains("expanded-bottom")
+        ) {
           // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
-          pageEl.classList.remove('expanded-top');
-          pageEl.classList.remove('expanded-bottom');
-          pageEl.classList.remove('hover-top');
-          pageEl.classList.remove('hover-bottom');
+          pageEl.classList.remove("expanded-top");
+          pageEl.classList.remove("expanded-bottom");
+          pageEl.classList.remove("hover-top");
+          pageEl.classList.remove("hover-bottom");
         } else {
           // 기본 상태 -> 상단 확장
-          pageEl.classList.add('expanded-top');
-          pageEl.classList.remove('hover-top');
+          pageEl.classList.add("expanded-top");
+          pageEl.classList.remove("hover-top");
         }
       });
 
-      bottomSection.addEventListener('click', () => {
-        if (pageEl.classList.contains('expanded-bottom') || pageEl.classList.contains('expanded-top')) {
+      bottomSection.addEventListener("click", () => {
+        if (
+          pageEl.classList.contains("expanded-bottom") ||
+          pageEl.classList.contains("expanded-top")
+        ) {
           // 확장된 상태(어느 쪽이든)라면 -> 복귀 (기본값)
-          pageEl.classList.remove('expanded-bottom');
-          pageEl.classList.remove('expanded-top');
-          pageEl.classList.remove('hover-bottom');
-          pageEl.classList.remove('hover-top');
+          pageEl.classList.remove("expanded-bottom");
+          pageEl.classList.remove("expanded-top");
+          pageEl.classList.remove("hover-bottom");
+          pageEl.classList.remove("hover-top");
         } else {
           // 기본 상태 -> 하단 확장
-          pageEl.classList.add('expanded-bottom');
-          pageEl.classList.remove('hover-bottom');
+          pageEl.classList.add("expanded-bottom");
+          pageEl.classList.remove("hover-bottom");
         }
       });
 
-      bottomSection.addEventListener('click', () => {
-        if (pageEl.classList.contains('expanded-bottom')) {
+      bottomSection.addEventListener("click", () => {
+        if (pageEl.classList.contains("expanded-bottom")) {
           // 이미 확장된 상태라면 -> 복귀 (50:50)
-          pageEl.classList.remove('expanded-bottom');
-          pageEl.classList.remove('hover-bottom');
+          pageEl.classList.remove("expanded-bottom");
+          pageEl.classList.remove("hover-bottom");
         } else {
           // 그 외 (기본 상태거나 상단이 확장된 상태) -> 하단으로 바로 확장전환
-          pageEl.classList.remove('expanded-top');
-          pageEl.classList.remove('hover-top'); // 상단 호버/확장 클래스 모두 제거
+          pageEl.classList.remove("expanded-top");
+          pageEl.classList.remove("hover-top"); // 상단 호버/확장 클래스 모두 제거
 
-          pageEl.classList.add('expanded-bottom');
-          pageEl.classList.remove('hover-bottom');
+          pageEl.classList.add("expanded-bottom");
+          pageEl.classList.remove("hover-bottom");
         }
       });
     }
@@ -1302,7 +1355,6 @@
 
     init();
   </script>
-
 </body>
 
 </html>
